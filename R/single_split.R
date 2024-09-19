@@ -24,8 +24,8 @@
 #' @author Kai Guo
 fct_split <- function(factor_vec, split_pattern, use_pattern = 1, part = 1, position = NULL, char_freq = FALSE, decreasing = FALSE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.character(split_pattern) || length(split_pattern) < 1) {
     stop("The 'split_pattern' must be a character vector with at least one pattern.")

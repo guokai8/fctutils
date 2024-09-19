@@ -23,8 +23,8 @@
 #' @author Kai Guo
 fct_filter_freq <- function(factor_vec, min_freq = 1, na.rm = FALSE, case = FALSE, decreasing = TRUE, return_info = FALSE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.numeric(min_freq) || min_freq <= 0 || min_freq != as.integer(min_freq)) {
     stop("The 'min_freq' parameter must be a positive integer.")
@@ -134,8 +134,8 @@ fct_filter_freq <- function(factor_vec, min_freq = 1, na.rm = FALSE, case = FALS
 #' @author Kai Guo
 fct_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, remove_na = TRUE) {
   # Input validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
 
   if (!is.null(positions)) {
@@ -226,8 +226,8 @@ fct_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, rem
 #' @author Kai Guo
 fct_remove_levels <- function(factor_vec, levels_to_remove) {
   #
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.character(levels_to_remove)) {
     stop("The 'levels_to_remove' parameter must be a character vector.")

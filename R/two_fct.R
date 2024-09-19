@@ -100,8 +100,8 @@ fct_reorder_within <- function(factor_vec, group_vec, by, fun = mean, decreasing
 #' @export
 #' @author Kai Guo
 fct_merge_similar <- function(factor_vec, max_distance = 1, method = 'lv') {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.numeric(max_distance) || max_distance < 0) {
     stop("The 'max_distance' must be a non-negative numeric value.")
@@ -141,8 +141,8 @@ fct_merge_similar <- function(factor_vec, max_distance = 1, method = 'lv') {
 #' @export
 #' @author Kai Guo
 fct_rename_levels <- function(factor_vec, mapping_df) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.data.frame(mapping_df) || !all(c('old', 'new') %in% names(mapping_df))) {
     stop("The 'mapping_df' must be a data frame with columns 'old' and 'new'.")
@@ -179,8 +179,8 @@ fct_rename_levels <- function(factor_vec, mapping_df) {
 #' @author Kai Guo
 fct_sort <- function(factor_vec, by, decreasing = FALSE, na_last = TRUE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (length(factor_vec) != length(by)) {
     stop("The 'factor_vec' and 'by' must be of the same length.")
@@ -241,8 +241,8 @@ fct_sort <- function(factor_vec, by, decreasing = FALSE, na_last = TRUE) {
 #' @export
 #' @author Kai Guo
 fct_sort_custom <- function(factor_vec, sort_func, decreasing = FALSE) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.function(sort_func)) {
     stop("The 'sort_func' must be a function.")

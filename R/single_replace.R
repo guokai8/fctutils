@@ -18,8 +18,8 @@
 #' @author Kai Guo
 fct_replace <- function(factor_vec, old_level, new_level, position = NULL) {
   #
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.character(old_level) || length(old_level) != 1) {
     stop("The 'old_level' parameter must be a single character string.")
@@ -84,8 +84,8 @@ fct_replace <- function(factor_vec, old_level, new_level, position = NULL) {
 #' @author Kai Guo
 fct_replace_pattern <- function(factor_vec, pattern, replacement) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.character(pattern) || length(pattern) != 1) {
     stop("The 'pattern' parameter must be a single character string.")
@@ -121,8 +121,10 @@ fct_replace_pattern <- function(factor_vec, pattern, replacement) {
 #' @author Kai Guo
 fct_merge <- function(factor_vec1, factor_vec2, level_order = NULL) {
   #
-  if (!is.factor(factor_vec1) || !is.factor(factor_vec2)) {
-    stop("Both 'factor_vec1' and 'factor_vec2' must be factor vectors.")
+  if(!is.factor(factor_vec1) || !is.factor(factor_vec2)){
+    factor_vec1 <- as.factor(factor_vec1)
+    factor_vec2 <- as.factor(factor_vec2)
+
   }
   if (!is.null(level_order) && !is.character(level_order)) {
     stop("The 'level_order' parameter must be a character vector or NULL.")

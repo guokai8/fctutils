@@ -19,6 +19,9 @@
 #' @author Kai Guo
 fct_pos <- function(factor_vec, positions, case = FALSE, decreasing = FALSE) {
   # Parameter validation
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
+  }
   if (!is.numeric(positions) || any(positions <= 0) || any(positions != as.integer(positions))) {
     stop("The 'positions' parameter must be a vector of positive integers.")
   }
@@ -83,8 +86,8 @@ fct_pos <- function(factor_vec, positions, case = FALSE, decreasing = FALSE) {
 #' @author Kai Guo
 fct_count <- function(factor_vec, decreasing = TRUE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.logical(decreasing) || length(decreasing) != 1) {
     stop("The 'decreasing' parameter must be a single logical value.")
@@ -121,6 +124,9 @@ fct_count <- function(factor_vec, decreasing = TRUE) {
 #' @author Kai Guo
 fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, decreasing = FALSE) {
   # Parameter validation
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
+  }
   if (!is.null(start_pos) && (!is.numeric(start_pos) || start_pos <= 0 || start_pos != as.integer(start_pos))) {
     stop("The 'start_pos' parameter must be a positive integer.")
   }
@@ -202,8 +208,8 @@ fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, 
 #' @author Kai Guo
 fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.logical(case) || length(case) != 1) {
     stop("The 'case' parameter must be a single logical value.")
@@ -271,8 +277,8 @@ fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE) {
 #' @author Kai Guo
 fct_char_freq <- function(factor_vec, positions, case = FALSE, decreasing = TRUE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.numeric(positions) || any(positions <= 0) || any(positions != as.integer(positions))) {
     stop("The 'positions' parameter must be a vector of positive integers.")
@@ -362,8 +368,8 @@ fct_char_freq <- function(factor_vec, positions, case = FALSE, decreasing = TRUE
 #' @author Kai Guo
 fct_substr_freq <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, decreasing = TRUE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (is.null(start_pos) && is.null(end_pos)) {
     stop("At least one of 'start_pos' or 'end_pos' must be provided.")
@@ -463,8 +469,8 @@ fct_substr_freq <- function(factor_vec, start_pos = NULL, end_pos = NULL, case =
 #' @author Kai Guo
 fct_regex_freq <- function(factor_vec, pattern, case = FALSE, decreasing = TRUE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.character(pattern) || length(pattern) != 1) {
     stop("The 'pattern' parameter must be a single string representing a regular expression.")
@@ -538,8 +544,8 @@ fct_regex_freq <- function(factor_vec, pattern, case = FALSE, decreasing = TRUE)
 #' @author Kai Guo
 fct_na <- function(factor_vec, keep_na = TRUE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.logical(keep_na) || length(keep_na) != 1) {
     stop("The 'keep_na' parameter must be a single logical value.")
@@ -579,8 +585,8 @@ fct_na <- function(factor_vec, keep_na = TRUE) {
 #' @author Kai Guo
 fct_table <- function(factor_vec, case = FALSE, include_na = FALSE, as_table = TRUE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.logical(case) || length(case) != 1) {
     stop("The 'case' parameter must be a single logical value.")
@@ -637,8 +643,8 @@ fct_table <- function(factor_vec, case = FALSE, include_na = FALSE, as_table = T
 #' @author Kai Guo
 fct_group_by_prefix <- function(factor_vec, prefix_length) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.numeric(prefix_length) || prefix_length <= 0 || prefix_length != as.integer(prefix_length)) {
     stop("The 'prefix_length' must be a positive integer.")
@@ -676,8 +682,8 @@ fct_group_by_prefix <- function(factor_vec, prefix_length) {
 #' @export
 #' @author Kai Guo
 fct_split_levels <- function(factor_vec, delimiter, names = NULL) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.character(delimiter) || length(delimiter) != 1) {
     stop("The 'delimiter' must be a single character string.")

@@ -141,8 +141,8 @@ fct_reorder_within <- function(factor_vec, group_vec, by, fun = mean, decreasing
 #' @author Kai Guo
 fct_reverse <- function(factor_vec) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
 
   # Reverse levels
@@ -169,8 +169,8 @@ fct_reverse <- function(factor_vec) {
 #' @author Kai Guo
 fct_len <- function(factor_vec, decreasing = FALSE) {
   # Parameter validation
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.logical(decreasing) || length(decreasing) != 1) {
     stop("The 'decreasing' parameter must be a single logical value.")
@@ -259,8 +259,8 @@ fct_combine <- function(vector1, vector2, sort_by = 1, decreasing = FALSE) {
 #' @export
 #' @author Kai Guo
 fct_encode <- function(factor_vec, mapping = NULL) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
 
   levels_vec <- levels(factor_vec)
@@ -329,8 +329,8 @@ fct_decode <- function(codes, mapping) {
 #' @export
 #' @author Kai Guo
 fct_rollup <- function(factor_vec, groups) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (length(factor_vec) != length(groups)) {
     stop("The 'factor_vec' and 'groups' must be of the same length.")
@@ -359,8 +359,8 @@ fct_rollup <- function(factor_vec, groups) {
 #' @export
 #' @author Kai Guo
 fct_pattern_replace <- function(factor_vec, pattern, replacement) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.character(pattern) || length(pattern) != 1) {
     stop("The 'pattern' must be a single string representing a regular expression.")
@@ -391,8 +391,8 @@ fct_pattern_replace <- function(factor_vec, pattern, replacement) {
 #' @export
 #' @author Kai Guo
 fct_level_stats <- function(factor_vec, numeric_vec, stat_func) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.numeric(numeric_vec)) {
     stop("The 'numeric_vec' must be a numeric vector.")
@@ -427,8 +427,8 @@ fct_level_stats <- function(factor_vec, numeric_vec, stat_func) {
 #' @export
 #' @author Kai Guo
 fct_apply <- function(factor_vec, apply_func) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.function(apply_func)) {
     stop("The 'apply_func' must be a function.")
@@ -454,8 +454,8 @@ fct_apply <- function(factor_vec, apply_func) {
 #' @export
 #' @author Kai Guo
 fct_sample_levels <- function(factor_vec, size, seed = NULL) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.numeric(size) || size <= 0 || size != as.integer(size)) {
     stop("The 'size' must be a positive integer.")
@@ -490,8 +490,8 @@ fct_sample_levels <- function(factor_vec, size, seed = NULL) {
 #' @export
 #' @author Kai Guo
 fct_pad_levels <- function(factor_vec, width, pad_char = '0') {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.numeric(width) || width <= 0 || width != as.integer(width)) {
     stop("The 'width' must be a positive integer.")
@@ -520,8 +520,8 @@ fct_pad_levels <- function(factor_vec, width, pad_char = '0') {
 #' @export
 #' @author Kai Guo
 fct_replace_na <- function(factor_vec, replacement_level) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.character(replacement_level) || length(replacement_level) != 1) {
     stop("The 'replacement_level' must be a single character string.")
@@ -551,8 +551,8 @@ fct_replace_na <- function(factor_vec, replacement_level) {
 #' @export
 #' @author Kai Guo
 fct_level_order <- function(factor_vec) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
 
   unique_levels <- unique(as.character(factor_vec))
@@ -575,8 +575,8 @@ fct_level_order <- function(factor_vec) {
 #' @export
 #' @author Kai Guo
 fct_dummy <- function(factor_vec) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
 
   # Create dummy variables
@@ -599,8 +599,8 @@ fct_dummy <- function(factor_vec) {
 #' @export
 #' @author Kai Guo
 fct_level_lengths <- function(factor_vec) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
 
   level_lengths <- nchar(levels(factor_vec))
@@ -622,8 +622,8 @@ fct_level_lengths <- function(factor_vec) {
 #' @export
 #' @author Kai Guo
 fct_duplicates <- function(factor_vec) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
 
   duplicates <- duplicated(as.character(factor_vec))
@@ -650,8 +650,8 @@ fct_duplicates <- function(factor_vec) {
 #' @export
 #' @author Kai Guo
 fct_collapse_lev <- function(factor_vec, groups) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.list(groups) || is.null(names(groups))) {
     stop("The 'groups' must be a named list.")
@@ -688,8 +688,8 @@ fct_collapse_lev <- function(factor_vec, groups) {
 #' @export
 #' @author Kai Guo
 fct_extract <- function(factor_vec, pattern, capture_group = 0) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.character(pattern) || length(pattern) != 1) {
     stop("The 'pattern' must be a single string representing a regular expression.")
@@ -738,8 +738,8 @@ fct_extract <- function(factor_vec, pattern, capture_group = 0) {
 #' @export
 #' @author Kai Guo
 fct_map_func <- function(factor_vec, map_func) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.function(map_func)) {
     stop("The 'map_func' must be a function.")
@@ -801,8 +801,8 @@ fct_factorize <- function(..., levels = NULL) {
 #' @export
 #' @author Kai Guo
 fct_filter_func <- function(factor_vec, func) {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
   if (!is.function(func)) {
     stop("The 'func' must be a function.")
@@ -832,8 +832,8 @@ fct_filter_func <- function(factor_vec, func) {
 #' @export
 #' @author Kai Guo
 fct_impute <- function(factor_vec, method = 'mode') {
-  if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+  if(!is.factor(factor_vec)){
+    factor_vec <- as.factor(factor_vec)
   }
 
   na_indices <- which(is.na(factor_vec))
