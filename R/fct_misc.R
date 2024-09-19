@@ -475,36 +475,62 @@ fct_sample_levels <- function(factor_vec, size, seed = NULL) {
 
   return(factor_vec_sampled)
 }
-#' @title Pad Factor Levels to Uniform Length
-#' @description Pads the levels of a factor vector with leading characters to achieve a specified width.
-#' @param factor_vec A factor vector.
-#' @param width An integer specifying the desired width.
-#' @param pad_char A character to use for padding. Default is \code{'0'}.
+#' @title Pad Factor Levels with Leading Characters
+#' @description Pads each level of a factor vector with leading characters to reach a specified width.
+#' @param factor_vec A factor vector whose levels will be padded.
+#' @param width An integer specifying the desired total width for each level after padding.
+#' @param pad_char A character string used for padding. Can be of length one or more characters.
 #' @return A factor vector with padded levels.
 #' @examples
 #' # Example factor vector
-#' factor_vec <- factor(c('1', '12', '123'))
+#' factor_vec <- factor(c('A', 'B', 'C', 'D'))
 #'
-#' # Pad levels to width 4
-#' fct_pad_levels(factor_vec, width = 4)
+#' # Pad levels to width 4 using '0' as padding character
+#' padded_factor <- fct_pad_levels(factor_vec, width = 4, pad_char = '0')
+#' print(levels(padded_factor))
+#' # Output: "000A" "000B" "000C" "000D"
+#'
+#' # Pad levels to width 6 using '%A' as padding string
+#' padded_factor <- fct_pad_levels(factor_vec, width = 6, pad_char = '%A')
+#' print(levels(padded_factor))
+#' # Output: "%%A%A" "%%A%B" "%%A%C" "%%A%D"
 #' @export
 #' @author Kai Guo
-fct_pad_levels <- function(factor_vec, width, pad_char = '0') {
-  if(!is.factor(factor_vec)){
-    factor_vec <- as.factor(factor_vec)
-  }
-  if (!is.numeric(width) || width <= 0 || width != as.integer(width)) {
-    stop("The 'width' must be a positive integer.")
-  }
-  if (!is.character(pad_char) || nchar(pad_char) != 1) {
-    stop("The 'pad_char' must be a single character.")
+fct_pad_levels <- function(factor_vec, width, pad_char) {
+  if (!is.factor(factor_vec)) {
+    stop("The 'factor_vec' must be a factor vector.")
   }
 
-  new_levels <- sprintf(paste0("%", pad_char, width, "s"), levels(factor_vec))
-  factor_vec_padded <- factor(factor_vec, levels = levels(factor_vec), labels = new_levels)
+  if (!is.numeric(width) || length(width) != 1 || width < 1) {
+    stop("The 'width' must be a single positive integer.")
+  }
 
-  return(factor_vec_padded)
+  if (!is.character(pad_char) || nchar(pad_char) < 1) {
+    stop("The 'pad_char' must be a non-empty character string.")
+  }
+
+  # Function to pad each level
+  pad_level <- function(level, width, pad_char) {
+    pad_len <- width - nchar(level)
+    if (pad_len > 0) {
+      # Calculate how many times to repeat pad_char
+      # Ensure the total padding length matches pad_len
+      full_repeats <- floor(pad_len / nchar(pad_char))
+      partial_repeat <- pad_len %% nchar(pad_char)
+      padding <- paste0(rep(pad_char, full_repeats), substr(pad_char, 1, partial_repeat), collapse = "")
+      paste0(padding, level)
+    } else {
+      level
+    }
+  }
+
+  # Apply padding to each level
+  padded_levels <- sapply(levels(factor_vec), pad_level, width = width, pad_char = pad_char)
+
+  # Update factor with padded levels
+  factor(factor_vec, levels = levels(factor_vec), labels = padded_levels)
 }
+
 
 #' @title Replace NA Values in Factor Vector
 #' @description Replaces \code{NA} values in a factor vector with a specified level.
