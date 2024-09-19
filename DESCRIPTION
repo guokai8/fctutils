@@ -10,7 +10,8 @@ Description: The fctutils package provides a collection of utility functions for
 License: GPL-3
 Imports:
     stringr,
-    stringdist
+    stringdist,
+    stats
 Encoding: UTF-8
 LazyData: yes
 LazyDataCompression: xz
