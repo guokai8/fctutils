@@ -4,12 +4,14 @@
 \alias{fct_remove_levels}
 \title{Remove Specified Levels from a Factor}
 \usage{
-fct_remove_levels(factor_vec, levels_to_remove)
+fct_remove_levels(factor_vec, levels_to_remove, remove_na = TRUE)
 }
 \arguments{
 \item{factor_vec}{A factor vector from which levels will be removed.}
 
 \item{levels_to_remove}{A character vector of levels to be removed from the factor.}
+
+\item{remove_na}{remove NA from the output? Default is \code{TRUE}.}
 }
 \value{
 A factor vector with specified levels removed and remaining levels unchanged.

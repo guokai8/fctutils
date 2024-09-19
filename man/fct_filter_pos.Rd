@@ -9,7 +9,9 @@ fct_filter_pos(
   positions = NULL,
   char,
   case = FALSE,
-  remove_na = TRUE
+  remove_na = TRUE,
+  invert = FALSE,
+  .return = FALSE
 )
 }
 \arguments{
@@ -22,6 +24,10 @@ fct_filter_pos(
 \item{case}{Logical. Should the character matching be case-sensitive? Default is \code{FALSE}.}
 
 \item{remove_na}{remove NA from the output? Default is \code{TRUE}.}
+
+\item{invert}{logical. If TRUE return indices or values for elements that do not match.}
+
+\item{.return}{logical. If TRUE return TRUE or FALSE instead of element.}
 }
 \value{
 A factor vector with levels removed where the specified character appears at the specified positions.

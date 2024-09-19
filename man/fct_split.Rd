@@ -7,7 +7,7 @@
 fct_split(
   factor_vec,
   split_pattern,
-  use_pattern = 1,
+  use_pattern = NULL,
   part = 1,
   position = NULL,
   char_freq = FALSE,
@@ -19,7 +19,7 @@ fct_split(
 
 \item{split_pattern}{A character vector specifying the pattern(s) or position(s) to use for splitting. Can be regular expressions or integer positions.}
 
-\item{use_pattern}{An integer specifying which pattern to use if multiple patterns are provided. Default is \code{1}.}
+\item{use_pattern}{An integer specifying which pattern to use if multiple patterns are provided. Default is \code{NULL} by using all pattern.}
 
 \item{part}{An integer or integer vector specifying which part(s) to use after splitting (e.g., 1 for the first part). Can be a range or specific indices.}
 
