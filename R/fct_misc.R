@@ -19,7 +19,7 @@ fct_intersect <- function(...) {
     stop("At least two factor vectors must be provided.")
   }
   if (!all(sapply(factors, is.factor))) {
-    stop("All inputs must be factor vectors.")
+    factors <- lapply(factors, as.factor)
   }
 
   # Get intersection of levels
@@ -57,7 +57,7 @@ fct_union <- function(...) {
     stop("At least two factor vectors must be provided.")
   }
   if (!all(sapply(factors, is.factor))) {
-    stop("All inputs must be factor vectors.")
+    factors <- lapply(factors, as.factor)
   }
 
   # Get union of levels
@@ -95,7 +95,8 @@ fct_union <- function(...) {
 fct_reorder_within <- function(factor_vec, group_vec, by, fun = mean, decreasing = FALSE) {
   # Parameter validation
   if (!is.factor(factor_vec) || !is.factor(group_vec)) {
-    stop("Both 'factor_vec' and 'group_vec' must be factor vectors.")
+    factor_vec <- as.factor(factor_vec)
+    group_vec <- as.factor(group_vec)
   }
   if (length(factor_vec) != length(group_vec) || length(factor_vec) != length(by)) {
     stop("All input vectors must be of the same length.")
@@ -508,7 +509,7 @@ fct_sample_levels <- function(factor_vec, size, seed = NULL) {
 #' @author Kai Guo
 fct_pad_levels <- function(factor_vec, width, pad_char) {
   if (!is.factor(factor_vec)) {
-    stop("The 'factor_vec' must be a factor vector.")
+    factor_vec <- as.factor(factor_vec)
   }
 
   if (!is.numeric(width) || length(width) != 1 || width < 1) {
@@ -915,7 +916,7 @@ fct_unique_comb <- function(..., sep = '_') {
   factors <- list(...)
 
   if (!all(sapply(factors, is.factor))) {
-    stop("All inputs must be factor vectors.")
+    factors <- lapply(factors, as.factor)
   }
   if (!is.character(sep) || length(sep) != 1) {
     stop("The 'sep' must be a single character string.")

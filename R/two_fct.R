@@ -30,59 +30,7 @@ fct_mapping <- function(original_factor, modified_factor) {
 
   return(mapping_df)
 }
-#' @title Reorder Factor Levels Within Groups
-#' @description Reorders the levels of a factor vector within groups defined by another factor vector.
-#' @param factor_vec A factor vector to be reordered.
-#' @param group_vec A factor vector defining the groups.
-#' @param by A numeric vector to order by.
-#' @param fun A function to summarize within groups (e.g., mean, median).
-#' @param decreasing Logical. Should the ordering be decreasing? Default is \code{FALSE}.
-#' @return A factor vector with levels reordered within groups.
-#' @examples
-#' # Example data
-#' data <- data.frame(
-#'   item = factor(c('A', 'B', 'C', 'D', 'E', 'F')),
-#'   group = factor(c('G1', 'G1', 'G1', 'G2', 'G2', 'G2')),
-#'   value = c(10, 15, 5, 20, 25, 15)
-#' )
-#'
-#' # Reorder 'item' within 'group' by 'value'
-#' data$item <- fct_reorder_within(data$item, data$group, data$value, mean)
-#' @export
-#' @author Kai Guo
-fct_reorder_within <- function(factor_vec, group_vec, by, fun = mean, decreasing = FALSE) {
-  # Parameter validation
-  if (!is.factor(factor_vec) || !is.factor(group_vec)) {
-    stop("Both 'factor_vec' and 'group_vec' must be factor vectors.")
-  }
-  if (length(factor_vec) != length(group_vec) || length(factor_vec) != length(by)) {
-    stop("All input vectors must be of the same length.")
-  }
-  if (!is.function(fun)) {
-    stop("The 'fun' parameter must be a function.")
-  }
-  if (!is.logical(decreasing) || length(decreasing) != 1) {
-    stop("The 'decreasing' parameter must be a single logical value.")
-  }
 
-  # Compute summary statistics within groups
-  stats <- tapply(by, list(factor_vec, group_vec), FUN = fun, simplify = TRUE)
-
-  # Flatten the stats table and create a data frame
-  stats_df <- as.data.frame(as.table(stats), stringsAsFactors = FALSE)
-  colnames(stats_df) <- c("factor_level", "group_level", "stat")
-
-  # Order within groups
-  stats_df <- stats_df[order(stats_df$group_level, stats_df$stat, decreasing = decreasing), ]
-
-  # Create a new levels vector
-  new_levels <- unique(stats_df$factor_level)
-
-  # Reorder factor levels
-  factor_vec_reordered <- factor(factor_vec, levels = new_levels)
-
-  return(factor_vec_reordered)
-}
 #' @title Merge Similar Factor Levels
 #' @description Merges levels of a factor that are similar based on string distance.
 #' @importFrom stats hclust as.dist cutree
