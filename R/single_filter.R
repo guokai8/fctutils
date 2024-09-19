@@ -116,6 +116,8 @@ fct_filter_freq <- function(factor_vec, min_freq = 1, na.rm = FALSE, case = FALS
 #' @param char A single character string specifying the character to look for.
 #' @param case Logical. Should the character matching be case-sensitive? Default is \code{FALSE}.
 #' @param remove_na remove NA from the output? Default is \code{TRUE}.
+#' @param invert logical. If TRUE return indices or values for elements that do not match.
+#' @param .return logical. If TRUE return TRUE or FALSE instead of element.
 #' @return A factor vector with levels removed where the specified character appears at the specified positions.
 #' @examples
 #' # Example factor vector
@@ -132,7 +134,7 @@ fct_filter_freq <- function(factor_vec, min_freq = 1, na.rm = FALSE, case = FALS
 #' fct_filter_pos(factor_vec_case, positions = 1, char = 'A', case = TRUE)
 #' @export
 #' @author Kai Guo
-fct_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, remove_na = TRUE) {
+fct_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, remove_na = TRUE, invert = FALSE, .return = FALSE) {
   # Input validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -169,7 +171,7 @@ fct_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, rem
     } else {
       pos_list <- positions[positions <= str_length]
       if (length(pos_list) == 0) {
-        return(FALSE)
+        return(TRUE)
       }
     }
 
@@ -184,17 +186,19 @@ fct_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, rem
       }
 
       if (level_char == target_char) {
-        return(TRUE)
+        return(FALSE)
       }
     }
 
-    return(FALSE)
+    return(TRUE)
   }
 
   # Determine which levels to keep
   levels_to_keep_logical <- sapply(levels_vec, check_char_at_positions)
+  if(isTRUE(invert)){
+    levels_to_keep_logical <- - levels_to_keep_logical
+  }
   levels_to_keep <- levels_vec[levels_to_keep_logical]
-
   # Create a new factor with the filtered levels
   filtered_factor_vec <- factor(factor_vec, levels = levels_to_keep)
 
@@ -205,16 +209,19 @@ fct_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, rem
   if (remove_na) {
     filtered_factor_vec <- filtered_factor_vec[!is.na(filtered_factor_vec)]
   }
-
+  if(isTRUE(.return)){
+    filtered_factor_vec <- levels_to_keep_logical
+  }
   return(filtered_factor_vec)
-}
 
+}
 
 ####
 #' @title Remove Specified Levels from a Factor
 #' @description Removes specified levels from a factor vector, keeping the remaining levels and their order unchanged.
 #' @param factor_vec A factor vector from which levels will be removed.
 #' @param levels_to_remove A character vector of levels to be removed from the factor.
+#' @param remove_na remove NA from the output? Default is \code{TRUE}.
 #' @return A factor vector with specified levels removed and remaining levels unchanged.
 #' @examples
 #' # Example factor vector
@@ -224,7 +231,7 @@ fct_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, rem
 #' fct_remove_levels(factor_vec, levels_to_remove = c('banana', 'date'))
 #' @export
 #' @author Kai Guo
-fct_remove_levels <- function(factor_vec, levels_to_remove) {
+fct_remove_levels <- function(factor_vec, levels_to_remove, remove_na = TRUE) {
   #
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -251,7 +258,9 @@ fct_remove_levels <- function(factor_vec, levels_to_remove) {
 
   #
   factor_vec <- droplevels(factor_vec)
-
+  if (remove_na) {
+    factor_vec <- factor_vec[!is.na(factor_vec)]
+  }
   return(factor_vec)
 }
 
