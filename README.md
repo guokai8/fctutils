@@ -1,4 +1,5 @@
 # fctutils: Advanced Factor Manipulation Utilities for R
+ [![Project Status:](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)  [![](https://img.shields.io/badge/devel%20version-0.0.3-green.svg)](https://github.com/guokai8/fctutils)  ![Code Size:](https://img.shields.io/github/languages/code-size/guokai8/fctutils)
 
 The `fctutils` package provides a comprehensive suite of utilities for advanced manipulation and analysis of factor vectors in R. It offers tools for splitting, combining, reordering, filtering, and transforming factor levels based on various criteria. Designed to enhance the handling of categorical data, `fctutils` simplifies complex factor operations, making it easier to preprocess and analyze data in R.
 
