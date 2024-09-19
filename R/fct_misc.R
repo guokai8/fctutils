@@ -202,12 +202,17 @@ fct_len <- function(factor_vec, decreasing = FALSE) {
 #' vector2 <- c('date', 'fig', 'grape', 'honeydew')
 #'
 #' # Combine and sort based on vector1 levels
-#' fct_combine(vector1, vector2, sort_by = 1)
+#' combined_factor1 <- fct_combine(vector1, vector2, sort_by = 1)
+#' print(combined_factor1)
 #'
 #' # Combine and sort based on vector2 levels
-#' fct_combine(vector1, vector2, sort_by = 2)
+#' combined_factor2 <- fct_combine(vector1, vector2, sort_by = 2)
+#' print(combined_factor2)
+#'
+#' # Combine with decreasing order based on vector1
+#' combined_factor3 <- fct_combine(vector1, vector2, sort_by = 1, decreasing = TRUE)
+#' print(combined_factor3)
 #' @export
-#' @author Kai Guo
 fct_combine <- function(vector1, vector2, sort_by = 1, decreasing = FALSE) {
   # Parameter validation
   if (!is.numeric(sort_by) || !(sort_by %in% c(1, 2))) {
@@ -220,21 +225,26 @@ fct_combine <- function(vector1, vector2, sort_by = 1, decreasing = FALSE) {
   # Combine vectors
   combined_vector <- c(vector1, vector2)
 
-  # Determine levels for sorting
+  # Determine base levels based on sort_by
   if (sort_by == 1) {
-    levels_vec <- unique(vector1)
+    base_levels <- unique(vector1)
   } else {
-    levels_vec <- unique(vector2)
+    base_levels <- unique(vector2)
   }
 
-  # Include levels from both vectors to avoid missing levels
-  levels_vec <- unique(c(levels_vec, combined_vector))
+  # Identify additional levels not in base_levels
+  additional_levels <- unique(combined_vector[!(combined_vector %in% base_levels)])
 
-  # Sort levels
-  levels_vec <- sort(levels_vec, decreasing = decreasing)
+  # Combine base_levels and additional_levels
+  levels_vec <- c(base_levels, additional_levels)
 
-  # Create factor
-  combined_factor <- factor(combined_vector, levels = levels_vec)
+  # Apply decreasing order if specified
+  if (decreasing) {
+    levels_vec <- rev(levels_vec)
+  }
+
+  # Create factor with specified level order
+  combined_factor <- factor(combined_vector, levels = levels_vec, ordered = FALSE)
 
   return(combined_factor)
 }
