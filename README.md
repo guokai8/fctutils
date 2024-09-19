@@ -254,7 +254,7 @@ data <- data.frame(
   group = factor(c('G1', 'G1', 'G1', 'G2', 'G2', 'G2')),
   value = c(10, 15, 5, 20, 25, 15)
 )
-
+data <- rbind(data, data)
 # Reorder 'item' within 'group' by 'value'
 data$item <- fct_reorder_within(data$item, data$group, data$value, mean)
 ```
