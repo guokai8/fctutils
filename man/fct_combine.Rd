@@ -27,11 +27,14 @@ vector1 <- c('apple', 'banana', 'cherry')
 vector2 <- c('date', 'fig', 'grape', 'honeydew')
 
 # Combine and sort based on vector1 levels
-fct_combine(vector1, vector2, sort_by = 1)
+combined_factor1 <- fct_combine(vector1, vector2, sort_by = 1)
+print(combined_factor1)
 
 # Combine and sort based on vector2 levels
-fct_combine(vector1, vector2, sort_by = 2)
-}
-\author{
-Kai Guo
+combined_factor2 <- fct_combine(vector1, vector2, sort_by = 2)
+print(combined_factor2)
+
+# Combine with decreasing order based on vector1
+combined_factor3 <- fct_combine(vector1, vector2, sort_by = 1, decreasing = TRUE)
+print(combined_factor3)
 }
