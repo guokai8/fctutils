@@ -2,7 +2,7 @@
 #' @description Splits the levels of a factor vector using specified patterns or positions and reorders based on specified parts or criteria.
 #' @param factor_vec A factor vector to be processed.
 #' @param split_pattern A character vector specifying the pattern(s) or position(s) to use for splitting. Can be regular expressions or integer positions.
-#' @param use_pattern An integer specifying which pattern to use if multiple patterns are provided. Default is \code{1}.
+#' @param use_pattern An integer specifying which pattern to use if multiple patterns are provided. Default is \code{NULL} by using all pattern.
 #' @param part An integer or integer vector specifying which part(s) to use after splitting (e.g., 1 for the first part). Can be a range or specific indices.
 #' @param position An integer or integer vector specifying the character positions within the part(s) to consider.
 #' @param char_freq Logical. Should the sorting be based on character frequencies within the specified part(s)? Default is \code{FALSE}.
@@ -22,13 +22,16 @@
 #' fct_split(factor_vec, split_pattern = '-', part = 2, char_freq = TRUE)
 #' @export
 #' @author Kai Guo
-fct_split <- function(factor_vec, split_pattern, use_pattern = 1, part = 1, position = NULL, char_freq = FALSE, decreasing = FALSE) {
+fct_split <- function(factor_vec, split_pattern, use_pattern = NULL, part = 1, position = NULL, char_freq = FALSE, decreasing = FALSE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
   if (!is.character(split_pattern) || length(split_pattern) < 1) {
     stop("The 'split_pattern' must be a character vector with at least one pattern.")
+  }
+  if(is.null(use_pattern)){
+    use_pattern <- length(split_pattern)
   }
   if (!is.numeric(use_pattern) || use_pattern <= 0 || use_pattern > length(split_pattern) || use_pattern != as.integer(use_pattern)) {
     stop("The 'use_pattern' must be a positive integer within the range of 'split_pattern' length.")
@@ -47,7 +50,11 @@ fct_split <- function(factor_vec, split_pattern, use_pattern = 1, part = 1, posi
   }
 
   # Select the pattern to use for splitting
-  pattern_to_use <- split_pattern[use_pattern]
+  if(use_pattern == length(split_pattern)){
+    pattern_to_use <- split_pattern
+  }else{
+    pattern_to_use <- split_pattern[use_pattern]
+  }
 
   # Split levels using the selected pattern
   split_levels <- strsplit(as.character(factor_vec), split = pattern_to_use, perl = TRUE)
