@@ -270,7 +270,20 @@ factor_vec <- factor(c('apple: red', 'banana: yellow', 'cherry: red'))
 fct_extract(factor_vec, pattern = '^(\\w+):', capture_group = 1)
 ```
 _fct_pad_levels_ Pads the levels of a factor vector with leading characters to achieve a specified width.
+```{r}
+# Example factor vector
+factor_vec <- factor(c('A', 'B', 'C', 'D'))
 
+# Pad levels to width 4 using '0' as padding character
+padded_factor <- fct_pad_levels(factor_vec, width = 4, pad_char = '0')
+print(levels(padded_factor))
+# Output: "000A" "000B" "000C" "000D"
+
+# Pad levels to width 6 using '%A' as padding string
+padded_factor <- fct_pad_levels(factor_vec, width = 6, pad_char = '%A')
+print(levels(padded_factor))
+# Output: "%%A%A" "%%A%B" "%%A%C" "%%A%D"
+```
 _fct_level_stats_ Computes statistical summaries for each level of a factor vector based on associated numeric data. (group_by and summarize). 
 
 _fct_pattern_replace_ Replaces substrings in factor levels that match a pattern with a replacement string. 
