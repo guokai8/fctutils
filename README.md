@@ -1,4 +1,4 @@
-# fctutils
+# fctutils: Advanced Factor Manipulation Utilities for R
 The fctutils package provides a collection of utility functions for manipulating and analyzing factor vectors in R. It offers tools for filtering, splitting, combining, and reordering factor levels based on various criteria. The package is designed to simplify common tasks in data preprocessing and categorical data analysis, making it easier to work with factors in a flexible and efficient manner.
 
 Key Features:
