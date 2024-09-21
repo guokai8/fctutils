@@ -229,6 +229,15 @@ fct_combine(vector1, vector2, sort_by = 1)
 fct_combine(vector1, vector2, sort_by = 2)
 ```
 ### 2.5 Other Useful Functions
+_fct_insert_ Inserts one or more new levels into a factor vector immediately after specified target levels. Targets can be identified by exact matches, positions, or pattern-based matching. Supports case sensitivity and handling of \code{NA} values. Can handle multiple insertions and maintains the original order of other levels. If a new level already exists in the factor and \code{allow_duplicates} is \code{FALSE}, it is moved to the desired position without duplication. If \code{allow_duplicates} is \code{TRUE}, unique duplicates are created.
+```{r}
+factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
+fct_insert(factor_vec, insert = 'date', target = 'banana', inplace = TRUE)
+fct_insert(factor_vec, insert = c('date', 'grape'), positions = c(2, 4))
+fct_insert(factor_vec, insert = 'honeydew', pattern = '^c')
+factor_vec_na <- factor(c('apple', NA, 'banana', 'cherry', NA, 'date'))
+fct_insert(factor_vec_na, insert = 'lychee', insert_after_na = TRUE)
+```
 _fct_intersect_ Combines multiple factor vectors and returns a factor vector containing only the levels common to all.
 ```{r}
 factor_vec1 <- factor(c('apple', 'banana', 'cherry'))
