@@ -229,7 +229,7 @@ fct_combine(vector1, vector2, sort_by = 1)
 fct_combine(vector1, vector2, sort_by = 2)
 ```
 ### 2.5 Other Useful Functions
-_fct_insert_ Inserts one or more new levels into a factor vector immediately after specified target levels. Targets can be identified by exact matches, positions, or pattern-based matching. Supports case sensitivity and handling of \code{NA} values. Can handle multiple insertions and maintains the original order of other levels. If a new level already exists in the factor and \code{allow_duplicates} is \code{FALSE}, it is moved to the desired position without duplication. If \code{allow_duplicates} is \code{TRUE}, unique duplicates are created.
+_fct_insert_ Inserts one or more new levels into a factor vector immediately after specified target levels. Targets can be identified by exact matches, positions, or pattern-based matching. Supports case sensitivity and handling of NA values. Can handle multiple insertions and maintains the original order of other levels. If a new level already exists in the factor and allow_duplicates is FALSE, it is moved to the desired position without duplication. If \code{allow_duplicates} is TRUE, unique duplicates are created.
 ```{r}
 factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
 fct_insert(factor_vec, insert = 'date', target = 'banana', inplace = TRUE)
