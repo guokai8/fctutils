@@ -6,7 +6,7 @@ The `fctutils` package provides a comprehensive suite of utilities for advanced 
 **Key Features**:
 
 - **Advanced Sorting and Reordering**: Sort factor levels based on custom functions, external vectors, or associated data.
-- **Factor Level Manipulation**: Functions to split, collapse, map, and extract substrings from factor levels.
+- **Factor Level Manipulation**: Functions to split, collapse, map, insert and extract substrings from factor levels.
 - **Grouping and Aggregation**: Aggregate factor levels based on grouping variables or hierarchical categories.
 - **Handling Missing Data**: Impute missing values in factors using various methods.
 - **Consistency Across Datasets**: Ensure consistent factor levels across multiple vectors or datasets.
