@@ -105,27 +105,45 @@ fct_rename_levels <- function(factor_vec, mapping_df) {
   return(factor_vec_renamed)
 }
 #' @title Sort Factor Levels Based on Another Vector or Column
-#' @description Sorts the levels of a factor vector based on the values of another vector or a column from a data frame. Handles cases where the sorting vector may contain `NA`s.
+#' @description Sorts the levels of a factor vector based on the values of another vector or a column from a data frame. Handles cases where the sorting vector may contain `NA`s. Optionally reorders the data vector's elements to align with the new levels' order.
 #' @param factor_vec A factor vector whose levels are to be sorted.
 #' @param by A vector or data frame column used as the basis for sorting. Must be the same length as `factor_vec`.
 #' @param decreasing Logical. Should the sorting be in decreasing order? Default is \code{FALSE}.
 #' @param na_last Logical. Should `NA` values be put last? Default is \code{TRUE}.
-#' @return A factor vector with levels sorted based on `by`.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.
+#' @return A factor vector with levels sorted based on `by`. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 #' @examples
-#' # Example using a vector
+#' # Example using a vector without reordering data elements
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date'))
 #' by_vec <- c(2, 3, 1, NA)
-#' fct_sort(factor_vec, by = by_vec)
+#' sorted_factor <- fct_sort(factor_vec, by = by_vec)
+#' print(sorted_factor)
+#' # [1] apple  banana cherry date
+#' # Levels: cherry apple banana date
 #'
-#' # Example using a data frame column
+#' # Example using a vector and reordering data elements
+#' sorted_factor_inplace <- fct_sort(factor_vec, by = by_vec, inplace = TRUE)
+#' print(sorted_factor_inplace)
+#' # [1] cherry apple banana date
+#' # Levels: cherry apple banana date
+#'
+#' # Example using a data frame column without reordering data elements
 #' data <- data.frame(
 #'   Category = factor(c('apple', 'banana', 'cherry', 'date')),
 #'   Value = c(2, 3, 1, NA)
 #' )
-#' fct_sort(data$Category, by = data$Value)
+#' sorted_factor_df <- fct_sort(data$Category, by = data$Value)
+#' print(sorted_factor_df)
+#' # [1] apple  banana cherry date
+#' # Levels: cherry apple banana date
+#'
+#' # Example using a data frame column and reordering data elements
+#' sorted_factor_df_inplace <- fct_sort(data$Category, by = data$Value, inplace = TRUE)
+#' print(sorted_factor_df_inplace)
+#' # [1] cherry apple banana date
+#' # Levels: cherry apple banana date
 #' @export
-#' @author Kai Guo
-fct_sort <- function(factor_vec, by, decreasing = FALSE, na_last = TRUE) {
+fct_sort <- function(factor_vec, by, decreasing = FALSE, na_last = TRUE, inplace = FALSE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -138,6 +156,9 @@ fct_sort <- function(factor_vec, by, decreasing = FALSE, na_last = TRUE) {
   }
   if (!is.logical(na_last) || length(na_last) != 1) {
     stop("The 'na_last' parameter must be a single logical value.")
+  }
+  if (!is.logical(inplace) || length(inplace) != 1) {
+    stop("The 'inplace' parameter must be a single logical value.")
   }
 
   # Handle NA values in 'by'
@@ -168,27 +189,66 @@ fct_sort <- function(factor_vec, by, decreasing = FALSE, na_last = TRUE) {
   # Reorder factor levels
   factor_vec_ordered <- factor(factor_vec, levels = ordered_levels)
 
-  return(factor_vec_ordered)
-}
+  if (inplace) {
+    # Reorder the data vector's elements to align with the new levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(ordered_levels), ordered_levels)
 
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(factor_vec_ordered)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- factor_vec_ordered[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(factor_vec_ordered)
+  }
+}
+####
 #' @title Sort Factor Levels Using a Custom Function
-#' @description Reorders the levels of a factor vector based on a custom function applied to each level.
+#' @description Reorders the levels of a factor vector based on a custom function applied to each level. Optionally reorders the data vector's elements to align with the new levels' order.
 #' @param factor_vec A factor vector to sort.
 #' @param sort_func A function that takes a character vector (the levels) and returns a vector of the same length to sort by.
 #' @param decreasing Logical. Should the sort be decreasing? Default is \code{FALSE}.
-#' @return A factor vector with levels reordered according to the custom function.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.
+#' @return A factor vector with levels reordered according to the custom function. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 #' @examples
 #' # Example factor vector
 #' factor_vec <- factor(c('apple', 'banana', 'cherry'))
 #'
-#' # Sort levels by reverse alphabetical order
-#' fct_sort_custom(factor_vec, function(x) -rank(x))
+#' # Sort levels by reverse alphabetical order without reordering data elements
+#' sorted_custom <- fct_sort_custom(factor_vec, function(x) -rank(x))
+#' print(sorted_custom)
+#' # [1] apple  banana cherry
+#' # Levels: cherry banana apple
 #'
-#' # Sort levels by length of the level name
-#' fct_sort_custom(factor_vec, function(x) nchar(x))
+#' # Sort levels by reverse alphabetical order and reorder data elements
+#' sorted_custom_inplace <- fct_sort_custom(factor_vec, function(x) -rank(x), inplace = TRUE)
+#' print(sorted_custom_inplace)
+#' # [1] cherry banana apple
+#' # Levels: cherry banana apple
+#'
+#' # Sort levels by length of the level name without reordering data elements
+#' sorted_custom_length <- fct_sort_custom(factor_vec, function(x) nchar(x))
+#' print(sorted_custom_length)
+#' # [1] apple  banana cherry
+#' # Levels: apple cherry banana
+#'
+#' # Sort levels by length of the level name and reorder data elements
+#' sorted_custom_length_inplace <- fct_sort_custom(factor_vec, function(x) nchar(x), inplace = TRUE)
+#' print(sorted_custom_length_inplace)
+#' # [1] apple  cherry banana
+#' # Levels: apple cherry banana
 #' @export
 #' @author Kai Guo
-fct_sort_custom <- function(factor_vec, sort_func, decreasing = FALSE) {
+fct_sort_custom <- function(factor_vec, sort_func, decreasing = FALSE, inplace = FALSE) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -197,6 +257,9 @@ fct_sort_custom <- function(factor_vec, sort_func, decreasing = FALSE) {
   }
   if (!is.logical(decreasing) || length(decreasing) != 1) {
     stop("The 'decreasing' parameter must be a single logical value.")
+  }
+  if (!is.logical(inplace) || length(inplace) != 1) {
+    stop("The 'inplace' parameter must be a single logical value.")
   }
 
   levels_vec <- levels(factor_vec)
@@ -209,8 +272,29 @@ fct_sort_custom <- function(factor_vec, sort_func, decreasing = FALSE) {
   ordered_levels <- levels_vec[order(sort_keys, decreasing = decreasing)]
   factor_vec_ordered <- factor(factor_vec, levels = ordered_levels)
 
-  return(factor_vec_ordered)
+  if (inplace) {
+    # Reorder the data vector's elements to align with the new levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(ordered_levels), ordered_levels)
+
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(factor_vec_ordered)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- factor_vec_ordered[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(factor_vec_ordered)
+  }
 }
+
 #' @title Concatenate Multiple Factor Vectors
 #' @description Combines multiple factor vectors into a single factor, unifying the levels.
 #' @param ... Factor vectors to concatenate.

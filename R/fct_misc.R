@@ -129,21 +129,34 @@ fct_reorder_within <- function(factor_vec, group_vec, by, fun = mean, decreasing
 
 
 #' @title Reverse Factor Levels
-#' @description Reverses the order of the levels in a factor vector.
+#' @description Reverses the order of the levels in a factor vector. Optionally reorders the data vector's elements to align with the reversed levels' order.
 #' @param factor_vec A factor vector whose levels will be reversed.
-#' @return A factor vector with levels in reversed order.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the reversed levels' order. If \code{FALSE}, returns a new factor vector with levels reversed without changing the data vector's elements' order. Defaults to \code{FALSE}.
+#' @return A factor vector with levels in reversed order. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 #' @examples
 #' # Example factor vector
 #' factor_vec <- factor(c('low', 'medium', 'high'))
 #'
-#' # Reverse the levels
-#' fct_reverse(factor_vec)
+#' # Reverse the levels without reordering data elements
+#' reversed_factor <- fct_reverse(factor_vec)
+#' print(reversed_factor)
+#' # [1] low    medium high
+#' # Levels: high medium low
+#'
+#' # Reverse the levels and reorder data elements
+#' reversed_factor_inplace <- fct_reverse(factor_vec, inplace = TRUE)
+#' print(reversed_factor_inplace)
+#' # [1] high   medium low
+#' # Levels: high medium low
 #' @export
 #' @author Kai Guo
-fct_reverse <- function(factor_vec) {
+fct_reverse <- function(factor_vec, inplace = FALSE) {
   # Parameter validation
-  if(!is.factor(factor_vec)){
+  if (!is.factor(factor_vec)) {
     factor_vec <- as.factor(factor_vec)
+  }
+  if (!is.logical(inplace) || length(inplace) != 1) {
+    stop("The 'inplace' parameter must be a single logical value.")
   }
 
   # Reverse levels
@@ -152,29 +165,62 @@ fct_reverse <- function(factor_vec) {
   # Create new factor with reversed levels
   factor_vec_reversed <- factor(factor_vec, levels = reversed_levels)
 
-  return(factor_vec_reversed)
+  if (inplace) {
+    # Reorder the data vector's elements to align with the reversed levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(reversed_levels), reversed_levels)
+
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(factor_vec_reversed)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- factor_vec_reversed[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(factor_vec_reversed)
+  }
 }
 
 #' @title Sort Factor Levels Based on Their Length
-#' @description Reorders the levels of a factor vector based on the character length of each level.
+#' @description Reorders the levels of a factor vector based on the character length of each level. Optionally reorders the data vector's elements to align with the new levels' order.
 #' @param factor_vec A factor vector to be sorted.
 #' @param decreasing Logical. Should the ordering be decreasing by length? Default is \code{FALSE}.
-#' @return A factor vector with levels reordered based on their length.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with levels reordered based on their length without changing the data vector's elements' order. Defaults to \code{FALSE}.
+#' @return A factor vector with levels reordered based on their length. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 #' @examples
 #' # Example factor vector
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date'))
 #'
-#' # Sort levels by length
-#' fct_len(factor_vec)
+#' # Sort levels by length without reordering data elements
+#' sorted_factor <- fct_len(factor_vec)
+#' print(sorted_factor)
+#' # [1] apple  banana cherry date
+#' # Levels: apple date banana cherry
+#'
+#' # Sort levels by length and reorder data elements
+#' sorted_factor_inplace <- fct_len(factor_vec, inplace = TRUE)
+#' print(sorted_factor_inplace)
+#' # [1] date   apple  banana cherry
+#' # Levels: apple date banana cherry
 #' @export
 #' @author Kai Guo
-fct_len <- function(factor_vec, decreasing = FALSE) {
+fct_len <- function(factor_vec, decreasing = FALSE, inplace = FALSE) {
   # Parameter validation
-  if(!is.factor(factor_vec)){
+  if (!is.factor(factor_vec)) {
     factor_vec <- as.factor(factor_vec)
   }
   if (!is.logical(decreasing) || length(decreasing) != 1) {
     stop("The 'decreasing' parameter must be a single logical value.")
+  }
+  if (!is.logical(inplace) || length(inplace) != 1) {
+    stop("The 'inplace' parameter must be a single logical value.")
   }
 
   # Get levels and their lengths
@@ -187,8 +233,29 @@ fct_len <- function(factor_vec, decreasing = FALSE) {
   # Reorder factor levels
   factor_vec_ordered <- factor(factor_vec, levels = ordered_levels)
 
-  return(factor_vec_ordered)
+  if (inplace) {
+    # Reorder the data vector's elements to align with the new levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(ordered_levels), ordered_levels)
+
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(factor_vec_ordered)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- factor_vec_ordered[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(factor_vec_ordered)
+  }
 }
+
 
 #' @title Combine Two Vectors of Unequal Lengths and Sort Based on Specified Levels
 #' @description Combines two vectors, which may be of unequal lengths, into a factor vector and sorts based on the levels of either the first or second vector.

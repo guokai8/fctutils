@@ -1,25 +1,83 @@
-#' @title Reorder Factor Levels Based on Characters at Specific Positions
-#' @description Reorders the levels of a factor vector based on the characters at specified positions within the factor levels.
-#' @importFrom stringr str_length str_sub str_to_lower
-#' @param factor_vec A factor vector whose levels are to be reordered.
-#' @param positions A vector of positive integers specifying the character positions to use for reordering. Positions can be non-consecutive.
-#' @param case Logical. Should the character comparison be case-sensitive? Default is \code{FALSE}.
-#' @param decreasing Logical. Should the ordering be decreasing? Default is \code{FALSE}.
-#' @return A factor vector with levels reordered based on the specified character positions.
+#' @title Reorder Factor Levels Based on Characters at Specified Positions
+#' @description Reorders the levels of a factor vector based on characters extracted from specified positions within each level's name. Supports case sensitivity, descending order, and optionally reorders the data vector's elements to align with the new levels' order.
+#' @param factor_vec A factor vector whose levels will be reordered.
+#' @param positions An integer vector specifying the character positions to extract from each level's name for ordering.
+#' @param case Logical. If \code{TRUE}, case is considered during ordering. If \code{FALSE}, all characters are converted to lowercase before ordering. Defaults to \code{FALSE}.
+#' @param decreasing Logical. If \code{TRUE}, the levels are ordered in decreasing order based on the extracted characters. Defaults to \code{FALSE}.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.
+#' @return A new factor vector with reordered levels. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 #' @examples
-#' # Example factor vector
-#' factor_vec <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
+#' # Example 1: Reorder levels based on characters at positions 2 and 4
+#' # without reordering data elements
+#' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
+#' new <- fct_pos(
+#'   factor_vec,
+#'   positions = c(2, 4),
+#'   case = FALSE,
+#'   decreasing = FALSE,
+#'   inplace = FALSE
+#' )
+#' print(new)
+#' # [1] apple  banana cherry date   fig    grape
+#' # Levels: apple banana date cherry fig grape
 #'
-#' # Reorder based on positions 1 and 3, case-insensitive
-#' fct_pos(factor_vec, positions = c(1, 3))
+#' # Example 2: Reorder levels based on characters at positions 2 and 4
+#' # and reorder data elements
+#' new_inplace <- fct_pos(
+#'   factor_vec,
+#'   positions = c(2, 4),
+#'   case = FALSE,
+#'   decreasing = FALSE,
+#'   inplace = TRUE
+#' )
+#' print(new_inplace)
+#' # [1] apple  banana date   cherry fig    grape
+#' # Levels: apple banana date cherry fig grape
 #'
-#' # Reorder in decreasing order, case-sensitive
-#' fct_pos(factor_vec, positions = 1:2, case = TRUE, decreasing = TRUE)
+#' # Example 3: Reorder levels in decreasing order based on characters at
+#' # positions 1 and 3 without reordering data elements
+#' new_dec <- fct_pos(
+#'   factor_vec,
+#'   positions = c(1, 3),
+#'   case = FALSE,
+#'   decreasing = TRUE,
+#'   inplace = FALSE
+#' )
+#' print(new_dec)
+#' # [1] apple  banana cherry date   fig    grape
+#' # Levels: grape fig date cherry banana apple
+#'
+#' # Example 4: Reorder levels with case sensitivity and reorder data elements
+#' factor_vec_case <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
+#' new_case <- fct_pos(
+#'   factor_vec_case,
+#'   positions = c(1, 2),
+#'   case = TRUE,
+#'   decreasing = FALSE,
+#'   inplace = TRUE
+#' )
+#' print(new_case)
+#' # [1] Apple  banana Cherry date   Fig    grape
+#' # Levels: Apple banana Cherry date Fig grape
+#'
+#' # Example 5: Reorder levels based on characters at positions 3, allowing
+#' # insertion at positions beyond string length
+#' factor_vec_short <- factor(c('go', 'dog', 'cat', 'bird'))
+#' new_short <- fct_pos(
+#'   factor_vec_short,
+#'   positions = c(3),
+#'   case = FALSE,
+#'   decreasing = FALSE,
+#'   inplace = FALSE
+#' )
+#' print(new_short)
+#' # [1] go   dog  cat  bird
+#' # Levels: cat dog bird go
 #' @export
 #' @author Kai Guo
-fct_pos <- function(factor_vec, positions, case = FALSE, decreasing = FALSE) {
+fct_pos <- function(factor_vec, positions, case = FALSE, decreasing = FALSE, inplace = FALSE) {
   # Parameter validation
-  if(!is.factor(factor_vec)){
+  if (!is.factor(factor_vec)) {
     factor_vec <- as.factor(factor_vec)
   }
   if (!is.numeric(positions) || any(positions <= 0) || any(positions != as.integer(positions))) {
@@ -32,6 +90,10 @@ fct_pos <- function(factor_vec, positions, case = FALSE, decreasing = FALSE) {
 
   if (!is.logical(decreasing) || length(decreasing) != 1) {
     stop("The 'decreasing' parameter must be a single logical value.")
+  }
+
+  if (!is.logical(inplace) || length(inplace) != 1) {
+    stop("The 'inplace' parameter must be a single logical value.")
   }
 
   # Get factor levels
@@ -64,14 +126,38 @@ fct_pos <- function(factor_vec, positions, case = FALSE, decreasing = FALSE) {
   # Order levels
   levels_ordered <- levels_vec[order(chars_at_positions, original_order, decreasing = decreasing, na.last = TRUE)]
 
-  # Return factor with reordered levels
-  factor(factor_vec, levels = levels_ordered)
+  # Create updated factor with reordered levels
+  updated_factor <- factor(factor_vec, levels = levels_ordered, ordered = is.ordered(factor_vec))
+
+  if (inplace) {
+    # Reorder the data vector's elements to align with the new levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(levels_ordered), levels_ordered)
+
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(updated_factor)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- updated_factor[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(updated_factor)
+  }
 }
+
 ###
 #' @title Reorder Factor Levels by Level Count
 #' @description Reorders the levels of a factor vector based on the count of each level in the data.
 #' @param factor_vec A factor vector whose levels are to be reordered.
 #' @param decreasing Logical. Should the ordering be decreasing by count? Default is \code{TRUE}.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.
 #' @return A factor vector with levels reordered based on their count.
 #' @examples
 #' # Example factor vector
@@ -84,7 +170,7 @@ fct_pos <- function(factor_vec, positions, case = FALSE, decreasing = FALSE) {
 #' fct_count(factor_vec, decreasing = FALSE)
 #' @export
 #' @author Kai Guo
-fct_count <- function(factor_vec, decreasing = TRUE) {
+fct_count <- function(factor_vec, decreasing = TRUE, inplace = FALSE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -100,7 +186,29 @@ fct_count <- function(factor_vec, decreasing = TRUE) {
   levels_ordered <- names(count_table)
 
   # Return factor with reordered levels
-  factor(factor_vec, levels = levels_ordered)
+  updated_factor <- factor(factor_vec, levels = levels_ordered, ordered = is.ordered(factor_vec))
+
+  if (inplace) {
+    # Reorder the data vector's elements to align with the new levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(levels_ordered), levels_ordered)
+
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(updated_factor)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- updated_factor[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(updated_factor)
+  }
 }
 ####
 #' @title Reorder Factor Levels Based on Substrings
@@ -110,6 +218,7 @@ fct_count <- function(factor_vec, decreasing = TRUE) {
 #' @param end_pos Positive integer. The ending position of the substring. If \code{NULL}, goes to the end of the string.
 #' @param case Logical. Should the substring comparison be case-sensitive? Default is \code{FALSE}.
 #' @param decreasing Logical. Should the ordering be decreasing? Default is \code{FALSE}.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.
 #' @return A factor vector with levels reordered based on the specified substring.
 #' @examples
 #' # Example factor vector
@@ -122,7 +231,7 @@ fct_count <- function(factor_vec, decreasing = TRUE) {
 #' fct_sub(factor_vec, start_pos = 3, case = TRUE)
 #' @export
 #' @author Kai Guo
-fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, decreasing = FALSE) {
+fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, decreasing = FALSE, inplace = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -185,30 +294,102 @@ fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, 
   levels_ordered <- levels_vec[order(substrings, original_order, decreasing = decreasing, na.last = TRUE)]
 
   # Return factor with reordered levels
-  factor(factor_vec, levels = levels_ordered)
+  updated_factor <- factor(factor_vec, levels = levels_ordered, ordered = is.ordered(factor_vec))
+
+  if (inplace) {
+    # Reorder the data vector's elements to align with the new levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(levels_ordered), levels_ordered)
+
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(updated_factor)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- updated_factor[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(updated_factor)
+  }
 }
 ####
-#' @title Reorder Factor Levels Based on Total Character Frequency
-#' @description Reorders the levels of a factor vector based on the total frequency of characters appearing in the vector.
-#' @param factor_vec A factor vector whose levels are to be reordered.
-#' @param case Logical. Should the character frequency count be case-sensitive? Default is \code{FALSE}.
-#' @param decreasing Logical. Should the ordering be decreasing by total character frequency? Default is \code{TRUE}.
-#' @return A factor vector with levels reordered based on the total frequency of their constituent characters in the data.
+#' @title Reorder Factor Levels Based on Character Frequency
+#' @description Reorders the levels of a factor vector based on the frequency of characters in each level's name. Supports case sensitivity, descending order, and optionally reorders the data vector's elements to align with the new levels' order.
+#' @param factor_vec A factor vector whose levels will be reordered.
+#' @param case Logical. If \code{TRUE}, case is considered during frequency calculation. If \code{FALSE}, all characters are converted to lowercase before frequency calculation. Defaults to \code{FALSE}.
+#' @param decreasing Logical. If \code{TRUE}, the levels are ordered in decreasing order based on character frequency. Defaults to \code{TRUE}.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.
+#' @return A new factor vector with reordered levels. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 #' @examples
-#' # Example factor vector
-#' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'banana', 'apple', 'fig'))
+#' # Example 1: Reorder levels based on character frequency without reordering data elements
+#' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
+#' new <- fct_freq(
+#'   factor_vec,
+#'   case = FALSE,
+#'   decreasing = TRUE,
+#'   inplace = FALSE
+#' )
+#' print(new)
+#' # [1] apple  banana cherry date   fig    grape
+#' # Levels: apple banana date cherry fig grape
 #'
-#' # Reorder levels based on total character frequency
-#' fct_freq(factor_vec)
+#' # Example 2: Reorder levels based on character frequency and reorder data elements
+#' new_inplace <- fct_freq(
+#'   factor_vec,
+#'   case = FALSE,
+#'   decreasing = TRUE,
+#'   inplace = TRUE
+#' )
+#' print(new_inplace)
+#' # [1] apple  banana date   cherry fig    grape
+#' # Levels: apple banana date cherry fig grape
 #'
-#' # Reorder levels, case-sensitive
-#' factor_vec_case <- factor(c('Apple', 'banana', 'Cherry', 'date', 'banana', 'apple', 'Fig'))
-#' fct_freq(factor_vec_case, case = TRUE)
+#' # Example 3: Reorder levels in decreasing order based on character frequency
+#' # without reordering data elements
+#' new_dec <- fct_freq(
+#'   factor_vec,
+#'   case = FALSE,
+#'   decreasing = TRUE,
+#'   inplace = FALSE
+#' )
+#' print(new_dec)
+#' # [1] apple  banana cherry date   fig    grape
+#' # Levels: apple banana date cherry fig grape
+#'
+#' # Example 4: Reorder levels with case sensitivity and reorder data elements
+#' factor_vec_case <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
+#' new_case <- fct_freq(
+#'   factor_vec_case,
+#'   case = TRUE,
+#'   decreasing = TRUE,
+#'   inplace = TRUE
+#' )
+#' print(new_case)
+#' # [1] Apple   banana  Cherry date    Fig     grape
+#' # Levels: cherry Apple banana grape Fig date
+#'
+#' # Example 5: Reorder levels based on character frequency, allowing insertion beyond string length
+#' factor_vec_short <- factor(c('go', 'dog', 'cat', 'bird'))
+#' new_short <- fct_freq(
+#'   factor_vec_short,
+#'   case = FALSE,
+#'   decreasing = TRUE,
+#'   inplace = FALSE
+#' )
+#' print(new_short)
+#' # [1] go   dog  cat  bird
+#' # Levels: cat dog bird go
 #' @export
 #' @author Kai Guo
-fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE) {
+fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE, inplace = FALSE) {
   # Parameter validation
-  if(!is.factor(factor_vec)){
+  if (!is.factor(factor_vec)) {
     factor_vec <- as.factor(factor_vec)
   }
   if (!is.logical(case) || length(case) != 1) {
@@ -216,6 +397,9 @@ fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE) {
   }
   if (!is.logical(decreasing) || length(decreasing) != 1) {
     stop("The 'decreasing' parameter must be a single logical value.")
+  }
+  if (!is.logical(inplace) || length(inplace) != 1) {
+    stop("The 'inplace' parameter must be a single logical value.")
   }
 
   # Convert factor levels to characters
@@ -243,7 +427,7 @@ fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE) {
 
   # Create a data frame to sort levels
   df_levels <- data.frame(
-    level = levels(factor_vec),
+    level = levels_vec,
     freq = level_char_freq,
     stringsAsFactors = FALSE
   )
@@ -251,9 +435,32 @@ fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE) {
   # Order the levels based on frequency
   df_levels <- df_levels[order(df_levels$freq, decreasing = decreasing), ]
 
-  # Return factor with reordered levels
-  factor(factor_vec, levels = df_levels$level)
+  # Create updated factor with reordered levels
+  updated_factor <- factor(factor_vec, levels = df_levels$level, ordered = is.ordered(factor_vec))
+
+  if (inplace) {
+    # Reorder the data vector's elements to align with the new levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(df_levels$level), df_levels$level)
+
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(updated_factor)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- updated_factor[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(updated_factor)
+  }
 }
+
 
 ####
 #' @title Reorder Factor Levels Based on Character Frequency at Positions
@@ -263,6 +470,7 @@ fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE) {
 #' @param positions A vector of positive integers specifying the character positions to consider.
 #' @param case Logical. Should the character comparison be case-sensitive? Default is \code{FALSE}.
 #' @param decreasing Logical. Should the ordering be decreasing by frequency? Default is \code{TRUE}.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.
 #' @return A factor vector with levels reordered based on the frequency of characters at specified positions.
 #' @examples
 #' # Example factor vector
@@ -275,7 +483,7 @@ fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE) {
 #' fct_char_freq(factor_vec, positions = c(1, 3), case = TRUE)
 #' @export
 #' @author Kai Guo
-fct_char_freq <- function(factor_vec, positions, case = FALSE, decreasing = TRUE) {
+fct_char_freq <- function(factor_vec, positions, case = FALSE, decreasing = TRUE, inplace = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -340,8 +548,29 @@ fct_char_freq <- function(factor_vec, positions, case = FALSE, decreasing = TRUE
 
   df_levels <- df_levels[order(df_levels$freq, df_levels$level, decreasing = decreasing), ]
 
-  # Return factor with reordered levels
-  factor(factor_vec, levels = df_levels$level)
+  updated_factor <- factor(factor_vec, levels = df_levels$level, ordered = is.ordered(factor_vec))
+
+  if (inplace) {
+    # Reorder the data vector's elements to align with the new levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(df_levels$level), df_levels$level)
+
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(updated_factor)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- updated_factor[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(updated_factor)
+  }
 }
 ###
 #' @title Reorder Factor Levels Based on Substring Frequency
@@ -352,21 +581,18 @@ fct_char_freq <- function(factor_vec, positions, case = FALSE, decreasing = TRUE
 #' @param end_pos Positive integer. The ending position of the substring. If \code{NULL}, goes to the end of the string.
 #' @param case Logical. Should the substring comparison be case-sensitive? Default is \code{FALSE}.
 #' @param decreasing Logical. Should the ordering be decreasing by frequency? Default is \code{TRUE}.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.
 #' @return A factor vector with levels reordered based on the frequency of substrings.
 #' @examples
 #' # Example factor vector with multi-byte characters
-#' factor_vec <- factor(c('苹果', '香蕉', '苹果', '樱桃', '香蕉', '香蕉', '日期'))
-#'
-#' # Reorder based on substrings from position 1 to 1
-#' fct_substr_freq(factor_vec, start_pos = 1, end_pos = 1)
-#'
+#' factor_vec <- factor(c('apple', 'banana', 'apricot', 'cherry', 'banana', 'banana', 'date'))
 #' # Reorder from position 2 to end
 #' fct_substr_freq(factor_vec, start_pos = 2)
 #' factor_vec <- factor(c('apple', 'banana', 'apricot', 'cherry', 'banana', 'banana', 'date'))
 #' fct_substr_freq(factor_vec, start_pos = 2, end_pos=3)
 #' @export
 #' @author Kai Guo
-fct_substr_freq <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, decreasing = TRUE) {
+fct_substr_freq <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, decreasing = TRUE, inplace = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -444,8 +670,29 @@ fct_substr_freq <- function(factor_vec, start_pos = NULL, end_pos = NULL, case =
 
   df_levels <- df_levels[order(df_levels$freq, df_levels$level, decreasing = decreasing), ]
 
-  # Return factor with reordered levels
-  factor(factor_vec, levels = df_levels$level)
+  updated_factor <- factor(factor_vec, levels = df_levels$level, ordered = is.ordered(factor_vec))
+
+  if (inplace) {
+    # Reorder the data vector's elements to align with the new levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(df_levels$level), df_levels$level)
+
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(updated_factor)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- updated_factor[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(updated_factor)
+  }
 }
 ####
 #' @title Reorder Factor Levels Based on Regex Pattern Frequency
@@ -455,6 +702,7 @@ fct_substr_freq <- function(factor_vec, start_pos = NULL, end_pos = NULL, case =
 #' @param pattern A string representing the regular expression pattern to match.
 #' @param case Logical. Should the pattern matching be case-sensitive? Default is \code{FALSE}.
 #' @param decreasing Logical. Should the ordering be decreasing by frequency? Default is \code{TRUE}.
+#' @param inplace Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.
 #' @return A factor vector with levels reordered based on the frequency of matched substrings.
 #' @examples
 #' # Example factor vector
@@ -467,7 +715,7 @@ fct_substr_freq <- function(factor_vec, start_pos = NULL, end_pos = NULL, case =
 #' fct_regex_freq(factor_vec, pattern = '^[A-Z]', case = TRUE)
 #' @export
 #' @author Kai Guo
-fct_regex_freq <- function(factor_vec, pattern, case = FALSE, decreasing = TRUE) {
+fct_regex_freq <- function(factor_vec, pattern, case = FALSE, decreasing = TRUE, inplace = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -522,8 +770,29 @@ fct_regex_freq <- function(factor_vec, pattern, case = FALSE, decreasing = TRUE)
 
   df_levels <- df_levels[order(df_levels$freq, df_levels$level, decreasing = decreasing), ]
 
-  # Return factor with reordered levels
-  factor(factor_vec, levels = df_levels$level)
+  updated_factor <- factor(factor_vec, levels = df_levels$level, ordered = is.ordered(factor_vec))
+
+  if (inplace) {
+    # Reorder the data vector's elements to align with the new levels' order
+    # Create a mapping of levels to their new order
+    level_order <- setNames(seq_along(df_levels$level), df_levels$level)
+
+    # Assign an order value to each element based on its level
+    element_order <- level_order[as.character(updated_factor)]
+
+    # Handle NA by assigning Inf to place them at the end
+    element_order[is.na(element_order)] <- Inf
+
+    # Get the order of elements
+    reordered_indices <- order(element_order, na.last = TRUE)
+
+    # Reorder the data vector
+    reordered_data <- updated_factor[reordered_indices]
+
+    return(reordered_data)
+  } else {
+    return(updated_factor)
+  }
 }
 ####
 #' @title Handle NA Values in Factor Vectors
