@@ -44,6 +44,8 @@ library(fctutils)
 factor_vec <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
 # Reorder based on positions 1 and 3, case-insensitive
 fct_pos(factor_vec, positions = c(1, 3))
+# Reorder based on positions 3, case-insensitive, inplace = TRUE
+fct_pos(factor_vec, positions = 3, inplace = TRUE)
 # Reorder in decreasing order, case-sensitive
 fct_pos(factor_vec, positions = 1:2, case = TRUE, decreasing = TRUE)
 ```
@@ -89,13 +91,7 @@ fct_char_freq(factor_vec, positions = c(1, 3), case = TRUE)
 ```
 _fct_substr_freq_ Reorders the levels of a factor vector based on the frequency of substrings extracted from the data.
 ```{r}
-factor_vec <- factor(c('苹果', '香蕉', '苹果', '樱桃', '香蕉', '香蕉', '日期'))
 
-# Reorder based on substrings from position 1 to 1
-fct_substr_freq(factor_vec, start_pos = 1, end_pos = 1)
-
-# Reorder from position 2 to end
-fct_substr_freq(factor_vec, start_pos = 2)
 factor_vec <- factor(c('apple', 'banana', 'apricot', 'cherry', 'banana', 'banana', 'date'))
 fct_substr_freq(factor_vec, start_pos = 2, end_pos=3)
 ```
@@ -112,7 +108,7 @@ fct_regex_freq(factor_vec, pattern = '^[A-Z]', case = TRUE)
 _fct_split_ Splits the levels of a factor vector using specified patterns or positions and reorders based on specified parts or criteria.
 ```{r}
 # Example factor vector with patterns
-factor_vec <- factor(c('item1-sub1', 'item2_sub2', 'item3|sub3', 'item1-sub4'))
+factor_vec <- factor(c('item1-sub1', 'atem2_aub2', 'item3|sub3', 'item1-sub4'))
 
 # Split by patterns '-', '_', or '|' and reorder based on the first part
 fct_split(factor_vec, split_pattern = c('-', '_', '\\|'), part = 1)
@@ -246,6 +242,16 @@ fct_combine(vector1, vector2, sort_by = 1)
 fct_combine(vector1, vector2, sort_by = 2)
 ```
 ### 2.5 Other Useful Functions
+_fct_insert_ Inserts one or more new levels into a factor vector immediately after specified target levels. Targets can be identified by exact matches, positions, or pattern-based matching. Supports case sensitivity and handling of \code{NA} values. Can handle multiple insertions and maintains the original order of other levels. If a new level already exists in the factor and \code{allow_duplicates} is \code{FALSE}, it is moved to the desired position without duplication. If \code{allow_duplicates} is \code{TRUE}, unique duplicates are created.
+```{r}
+factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
+fct_insert(factor_vec, insert = 'date', target = 'banana', inplace = TRUE)
+fct_insert(factor_vec, insert = c('date', 'grape'), positions = c(2, 4))
+fct_insert(factor_vec, insert = 'honeydew', pattern = '^c')
+factor_vec_na <- factor(c('apple', NA, 'banana', 'cherry', NA, 'date'))
+fct_insert(factor_vec_na, insert = 'lychee', insert_after_na = TRUE)
+```
+
 _fct_intersect_ Combines multiple factor vectors and returns a factor vector containing only the levels common to all.
 ```{r}
 factor_vec1 <- factor(c('apple', 'banana', 'cherry'))
@@ -271,8 +277,7 @@ data <- data.frame(
   group = factor(c('G1', 'G1', 'G1', 'G2', 'G2', 'G2')),
   value = c(10, 15, 5, 20, 25, 15)
 )
-data <- rbind(data,data)
-
+data <- rbind(data, data)
 # Reorder 'item' within 'group' by 'value'
 data$item <- fct_reorder_within(data$item, data$group, data$value, mean)
 ```
@@ -331,4 +336,3 @@ The `fctutils` package provides a comprehensive set of functions to efficiently 
 
 ## 4. Contact information
 For any questions please contact guokai8@gmail.com or submit the issues to https://github.com/guokai8/fctutils/issues
-
