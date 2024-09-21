@@ -2,33 +2,84 @@
 % Please edit documentation in R/single_fct.R
 \name{fct_freq}
 \alias{fct_freq}
-\title{Reorder Factor Levels Based on Total Character Frequency}
+\title{Reorder Factor Levels Based on Character Frequency}
 \usage{
-fct_freq(factor_vec, case = FALSE, decreasing = TRUE)
+fct_freq(factor_vec, case = FALSE, decreasing = TRUE, inplace = FALSE)
 }
 \arguments{
-\item{factor_vec}{A factor vector whose levels are to be reordered.}
+\item{factor_vec}{A factor vector whose levels will be reordered.}
 
-\item{case}{Logical. Should the character frequency count be case-sensitive? Default is \code{FALSE}.}
+\item{case}{Logical. If \code{TRUE}, case is considered during frequency calculation. If \code{FALSE}, all characters are converted to lowercase before frequency calculation. Defaults to \code{FALSE}.}
 
-\item{decreasing}{Logical. Should the ordering be decreasing by total character frequency? Default is \code{TRUE}.}
+\item{decreasing}{Logical. If \code{TRUE}, the levels are ordered in decreasing order based on character frequency. Defaults to \code{TRUE}.}
+
+\item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.}
 }
 \value{
-A factor vector with levels reordered based on the total frequency of their constituent characters in the data.
+A new factor vector with reordered levels. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 }
 \description{
-Reorders the levels of a factor vector based on the total frequency of characters appearing in the vector.
+Reorders the levels of a factor vector based on the frequency of characters in each level's name. Supports case sensitivity, descending order, and optionally reorders the data vector's elements to align with the new levels' order.
 }
 \examples{
-# Example factor vector
-factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'banana', 'apple', 'fig'))
+# Example 1: Reorder levels based on character frequency without reordering data elements
+factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
+new <- fct_freq(
+  factor_vec,
+  case = FALSE,
+  decreasing = TRUE,
+  inplace = FALSE
+)
+print(new)
+# [1] apple  banana cherry date   fig    grape
+# Levels: apple banana date cherry fig grape
 
-# Reorder levels based on total character frequency
-fct_freq(factor_vec)
+# Example 2: Reorder levels based on character frequency and reorder data elements
+new_inplace <- fct_freq(
+  factor_vec,
+  case = FALSE,
+  decreasing = TRUE,
+  inplace = TRUE
+)
+print(new_inplace)
+# [1] apple  banana date   cherry fig    grape
+# Levels: apple banana date cherry fig grape
 
-# Reorder levels, case-sensitive
-factor_vec_case <- factor(c('Apple', 'banana', 'Cherry', 'date', 'banana', 'apple', 'Fig'))
-fct_freq(factor_vec_case, case = TRUE)
+# Example 3: Reorder levels in decreasing order based on character frequency
+# without reordering data elements
+new_dec <- fct_freq(
+  factor_vec,
+  case = FALSE,
+  decreasing = TRUE,
+  inplace = FALSE
+)
+print(new_dec)
+# [1] apple  banana cherry date   fig    grape
+# Levels: apple banana date cherry fig grape
+
+# Example 4: Reorder levels with case sensitivity and reorder data elements
+factor_vec_case <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
+new_case <- fct_freq(
+  factor_vec_case,
+  case = TRUE,
+  decreasing = TRUE,
+  inplace = TRUE
+)
+print(new_case)
+# [1] Apple   banana  Cherry date    Fig     grape
+# Levels: cherry Apple banana grape Fig date
+
+# Example 5: Reorder levels based on character frequency, allowing insertion beyond string length
+factor_vec_short <- factor(c('go', 'dog', 'cat', 'bird'))
+new_short <- fct_freq(
+  factor_vec_short,
+  case = FALSE,
+  decreasing = TRUE,
+  inplace = FALSE
+)
+print(new_short)
+# [1] go   dog  cat  bird
+# Levels: cat dog bird go
 }
 \author{
 Kai Guo

@@ -2,34 +2,100 @@
 % Please edit documentation in R/single_fct.R
 \name{fct_pos}
 \alias{fct_pos}
-\title{Reorder Factor Levels Based on Characters at Specific Positions}
+\title{Reorder Factor Levels Based on Characters at Specified Positions}
 \usage{
-fct_pos(factor_vec, positions, case = FALSE, decreasing = FALSE)
+fct_pos(
+  factor_vec,
+  positions,
+  case = FALSE,
+  decreasing = FALSE,
+  inplace = FALSE
+)
 }
 \arguments{
-\item{factor_vec}{A factor vector whose levels are to be reordered.}
+\item{factor_vec}{A factor vector whose levels will be reordered.}
 
-\item{positions}{A vector of positive integers specifying the character positions to use for reordering. Positions can be non-consecutive.}
+\item{positions}{An integer vector specifying the character positions to extract from each level's name for ordering.}
 
-\item{case}{Logical. Should the character comparison be case-sensitive? Default is \code{FALSE}.}
+\item{case}{Logical. If \code{TRUE}, case is considered during ordering. If \code{FALSE}, all characters are converted to lowercase before ordering. Defaults to \code{FALSE}.}
 
-\item{decreasing}{Logical. Should the ordering be decreasing? Default is \code{FALSE}.}
+\item{decreasing}{Logical. If \code{TRUE}, the levels are ordered in decreasing order based on the extracted characters. Defaults to \code{FALSE}.}
+
+\item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.}
 }
 \value{
-A factor vector with levels reordered based on the specified character positions.
+A new factor vector with reordered levels. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 }
 \description{
-Reorders the levels of a factor vector based on the characters at specified positions within the factor levels.
+Reorders the levels of a factor vector based on characters extracted from specified positions within each level's name. Supports case sensitivity, descending order, and optionally reorders the data vector's elements to align with the new levels' order.
 }
 \examples{
-# Example factor vector
-factor_vec <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
+# Example 1: Reorder levels based on characters at positions 2 and 4
+# without reordering data elements
+factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
+new <- fct_pos(
+  factor_vec,
+  positions = c(2, 4),
+  case = FALSE,
+  decreasing = FALSE,
+  inplace = FALSE
+)
+print(new)
+# [1] apple  banana cherry date   fig    grape
+# Levels: apple banana date cherry fig grape
 
-# Reorder based on positions 1 and 3, case-insensitive
-fct_pos(factor_vec, positions = c(1, 3))
+# Example 2: Reorder levels based on characters at positions 2 and 4
+# and reorder data elements
+new_inplace <- fct_pos(
+  factor_vec,
+  positions = c(2, 4),
+  case = FALSE,
+  decreasing = FALSE,
+  inplace = TRUE
+)
+print(new_inplace)
+# [1] apple  banana date   cherry fig    grape
+# Levels: apple banana date cherry fig grape
 
-# Reorder in decreasing order, case-sensitive
-fct_pos(factor_vec, positions = 1:2, case = TRUE, decreasing = TRUE)
+# Example 3: Reorder levels in decreasing order based on characters at
+# positions 1 and 3 without reordering data elements
+new_dec <- fct_pos(
+  factor_vec,
+  positions = c(1, 3),
+  case = FALSE,
+  decreasing = TRUE,
+  inplace = FALSE
+)
+print(new_dec)
+# [1] apple  banana cherry date   fig    grape
+# Levels: grape fig date cherry banana apple
+
+# Example 4: Reorder levels with case sensitivity and reorder data elements
+factor_vec_case <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
+new_case <- fct_pos(
+  factor_vec_case,
+  positions = c(1, 2),
+  case = TRUE,
+  decreasing = FALSE,
+  inplace = TRUE
+)
+print(new_case)
+# [1] Apple  banana Cherry date   Fig    grape
+# Levels: Apple banana Cherry date Fig grape
+
+# Example 5: Reorder levels based on characters at positions 3, allowing
+# insertion at positions beyond string length
+factor_vec_short <- factor(c('go', 'dog', 'cat', 'bird'))
+new_short <- fct_pos(
+  factor_vec_short,
+  positions = c(3),
+  case = FALSE,
+  decreasing = FALSE,
+  inplace = FALSE
+)
+print(new_short)
+# [1] go   dog  cat  bird
+# Levels: cat dog bird go
 }
 \author{
 Kai Guo

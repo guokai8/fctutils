@@ -9,7 +9,8 @@ fct_sub(
   start_pos = NULL,
   end_pos = NULL,
   case = FALSE,
-  decreasing = FALSE
+  decreasing = FALSE,
+  inplace = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ fct_sub(
 \item{case}{Logical. Should the substring comparison be case-sensitive? Default is \code{FALSE}.}
 
 \item{decreasing}{Logical. Should the ordering be decreasing? Default is \code{FALSE}.}
+
+\item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.}
 }
 \value{
 A factor vector with levels reordered based on the specified substring.

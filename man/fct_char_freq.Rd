@@ -4,7 +4,13 @@
 \alias{fct_char_freq}
 \title{Reorder Factor Levels Based on Character Frequency at Positions}
 \usage{
-fct_char_freq(factor_vec, positions, case = FALSE, decreasing = TRUE)
+fct_char_freq(
+  factor_vec,
+  positions,
+  case = FALSE,
+  decreasing = TRUE,
+  inplace = TRUE
+)
 }
 \arguments{
 \item{factor_vec}{A factor vector whose levels are to be reordered.}
@@ -14,6 +20,8 @@ fct_char_freq(factor_vec, positions, case = FALSE, decreasing = TRUE)
 \item{case}{Logical. Should the character comparison be case-sensitive? Default is \code{FALSE}.}
 
 \item{decreasing}{Logical. Should the ordering be decreasing by frequency? Default is \code{TRUE}.}
+
+\item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.}
 }
 \value{
 A factor vector with levels reordered based on the frequency of characters at specified positions.

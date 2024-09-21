@@ -11,7 +11,8 @@ fct_split(
   part = 1,
   position = NULL,
   char_freq = FALSE,
-  decreasing = FALSE
+  decreasing = FALSE,
+  inplace = FALSE
 )
 }
 \arguments{
@@ -19,7 +20,7 @@ fct_split(
 
 \item{split_pattern}{A character vector specifying the pattern(s) or position(s) to use for splitting. Can be regular expressions or integer positions.}
 
-\item{use_pattern}{An integer specifying which pattern to use if multiple patterns are provided. Default is \code{NULL} by using all pattern.}
+\item{use_pattern}{An integer specifying which pattern to use if multiple patterns are provided. Default is \code{NULL} by using all patterns.}
 
 \item{part}{An integer or integer vector specifying which part(s) to use after splitting (e.g., 1 for the first part). Can be a range or specific indices.}
 
@@ -28,25 +29,32 @@ fct_split(
 \item{char_freq}{Logical. Should the sorting be based on character frequencies within the specified part(s)? Default is \code{FALSE}.}
 
 \item{decreasing}{Logical. Should the ordering be decreasing? Default is \code{FALSE}.}
+
+\item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.}
 }
 \value{
-A factor vector with levels reordered based on the specified conditions.
+A factor vector with levels reordered based on the specified conditions. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 }
 \description{
-Splits the levels of a factor vector using specified patterns or positions and reorders based on specified parts or criteria.
+Splits the levels of a factor vector using specified patterns or positions and reorders based on specified parts or criteria. Optionally reorders the data vector's elements to align with the new levels' order.
 }
 \examples{
-# Example factor vector with patterns
+# Example 1: Split by patterns '-', '_', or '|' and reorder based on the
+# first part without reordering data elements
 factor_vec <- factor(c('item1-sub1', 'item2_sub2', 'item3|sub3', 'item1-sub4'))
+fct_split(factor_vec, split_pattern = c('-', '_', '\\\\|'), part = 1, inplace = FALSE)
 
-# Split by patterns '-', '_', or '|' and reorder based on the first part
-fct_split(factor_vec, split_pattern = c('-', '_', '\\\\|'), part = 1)
+# Example 2: Use the second pattern '_' for splitting and reorder
+# data elements
+fct_split(factor_vec, split_pattern = c('-', '_', '\\\\|'), use_pattern = 2, part = 2, inplace = TRUE)
 
-# Use the second pattern '_' for splitting
-fct_split(factor_vec, split_pattern = c('-', '_', '\\\\|'), use_pattern = 2, part = 2)
+# Example 3: Reorder based on character frequencies in the specified part
+# without reordering data elements
+fct_split(factor_vec, split_pattern = '-', part = 2, char_freq = TRUE, inplace = FALSE)
 
-# Reorder based on character frequencies in the specified part
-fct_split(factor_vec, split_pattern = '-', part = 2, char_freq = TRUE)
+# Example 4: Split by pattern '-' and reorder both levels and data
+# elements based on the first part
+fct_split(factor_vec, split_pattern = '-', part = 1, inplace = TRUE)
 }
 \author{
 Kai Guo

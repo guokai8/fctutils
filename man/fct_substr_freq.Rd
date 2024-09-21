@@ -9,7 +9,8 @@ fct_substr_freq(
   start_pos = NULL,
   end_pos = NULL,
   case = FALSE,
-  decreasing = TRUE
+  decreasing = TRUE,
+  inplace = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ fct_substr_freq(
 \item{case}{Logical. Should the substring comparison be case-sensitive? Default is \code{FALSE}.}
 
 \item{decreasing}{Logical. Should the ordering be decreasing by frequency? Default is \code{TRUE}.}
+
+\item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.}
 }
 \value{
 A factor vector with levels reordered based on the frequency of substrings.
@@ -31,11 +34,7 @@ Reorders the levels of a factor vector based on the frequency of substrings extr
 }
 \examples{
 # Example factor vector with multi-byte characters
-factor_vec <- factor(c('苹果', '香蕉', '苹果', '樱桃', '香蕉', '香蕉', '日期'))
-
-# Reorder based on substrings from position 1 to 1
-fct_substr_freq(factor_vec, start_pos = 1, end_pos = 1)
-
+factor_vec <- factor(c('apple', 'banana', 'apricot', 'cherry', 'banana', 'banana', 'date'))
 # Reorder from position 2 to end
 fct_substr_freq(factor_vec, start_pos = 2)
 factor_vec <- factor(c('apple', 'banana', 'apricot', 'cherry', 'banana', 'banana', 'date'))

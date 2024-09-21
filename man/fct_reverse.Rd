@@ -4,23 +4,34 @@
 \alias{fct_reverse}
 \title{Reverse Factor Levels}
 \usage{
-fct_reverse(factor_vec)
+fct_reverse(factor_vec, inplace = FALSE)
 }
 \arguments{
 \item{factor_vec}{A factor vector whose levels will be reversed.}
+
+\item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the reversed levels' order. If \code{FALSE}, returns a new factor vector with levels reversed without changing the data vector's elements' order. Defaults to \code{FALSE}.}
 }
 \value{
-A factor vector with levels in reversed order.
+A factor vector with levels in reversed order. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 }
 \description{
-Reverses the order of the levels in a factor vector.
+Reverses the order of the levels in a factor vector. Optionally reorders the data vector's elements to align with the reversed levels' order.
 }
 \examples{
 # Example factor vector
 factor_vec <- factor(c('low', 'medium', 'high'))
 
-# Reverse the levels
-fct_reverse(factor_vec)
+# Reverse the levels without reordering data elements
+reversed_factor <- fct_reverse(factor_vec)
+print(reversed_factor)
+# [1] low    medium high
+# Levels: high medium low
+
+# Reverse the levels and reorder data elements
+reversed_factor_inplace <- fct_reverse(factor_vec, inplace = TRUE)
+print(reversed_factor_inplace)
+# [1] high   medium low
+# Levels: high medium low
 }
 \author{
 Kai Guo

@@ -4,7 +4,7 @@
 \alias{fct_sort}
 \title{Sort Factor Levels Based on Another Vector or Column}
 \usage{
-fct_sort(factor_vec, by, decreasing = FALSE, na_last = TRUE)
+fct_sort(factor_vec, by, decreasing = FALSE, na_last = TRUE, inplace = FALSE)
 }
 \arguments{
 \item{factor_vec}{A factor vector whose levels are to be sorted.}
@@ -14,26 +14,43 @@ fct_sort(factor_vec, by, decreasing = FALSE, na_last = TRUE)
 \item{decreasing}{Logical. Should the sorting be in decreasing order? Default is \code{FALSE}.}
 
 \item{na_last}{Logical. Should `NA` values be put last? Default is \code{TRUE}.}
+
+\item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.}
 }
 \value{
-A factor vector with levels sorted based on `by`.
+A factor vector with levels sorted based on `by`. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 }
 \description{
-Sorts the levels of a factor vector based on the values of another vector or a column from a data frame. Handles cases where the sorting vector may contain `NA`s.
+Sorts the levels of a factor vector based on the values of another vector or a column from a data frame. Handles cases where the sorting vector may contain `NA`s. Optionally reorders the data vector's elements to align with the new levels' order.
 }
 \examples{
-# Example using a vector
+# Example using a vector without reordering data elements
 factor_vec <- factor(c('apple', 'banana', 'cherry', 'date'))
 by_vec <- c(2, 3, 1, NA)
-fct_sort(factor_vec, by = by_vec)
+sorted_factor <- fct_sort(factor_vec, by = by_vec)
+print(sorted_factor)
+# [1] apple  banana cherry date
+# Levels: cherry apple banana date
 
-# Example using a data frame column
+# Example using a vector and reordering data elements
+sorted_factor_inplace <- fct_sort(factor_vec, by = by_vec, inplace = TRUE)
+print(sorted_factor_inplace)
+# [1] cherry apple banana date
+# Levels: cherry apple banana date
+
+# Example using a data frame column without reordering data elements
 data <- data.frame(
   Category = factor(c('apple', 'banana', 'cherry', 'date')),
   Value = c(2, 3, 1, NA)
 )
-fct_sort(data$Category, by = data$Value)
-}
-\author{
-Kai Guo
+sorted_factor_df <- fct_sort(data$Category, by = data$Value)
+print(sorted_factor_df)
+# [1] apple  banana cherry date
+# Levels: cherry apple banana date
+
+# Example using a data frame column and reordering data elements
+sorted_factor_df_inplace <- fct_sort(data$Category, by = data$Value, inplace = TRUE)
+print(sorted_factor_df_inplace)
+# [1] cherry apple banana date
+# Levels: cherry apple banana date
 }

@@ -4,12 +4,14 @@
 \alias{fct_count}
 \title{Reorder Factor Levels by Level Count}
 \usage{
-fct_count(factor_vec, decreasing = TRUE)
+fct_count(factor_vec, decreasing = TRUE, inplace = FALSE)
 }
 \arguments{
 \item{factor_vec}{A factor vector whose levels are to be reordered.}
 
 \item{decreasing}{Logical. Should the ordering be decreasing by count? Default is \code{TRUE}.}
+
+\item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.}
 }
 \value{
 A factor vector with levels reordered based on their count.

@@ -4,7 +4,7 @@
 \alias{fct_sort_custom}
 \title{Sort Factor Levels Using a Custom Function}
 \usage{
-fct_sort_custom(factor_vec, sort_func, decreasing = FALSE)
+fct_sort_custom(factor_vec, sort_func, decreasing = FALSE, inplace = FALSE)
 }
 \arguments{
 \item{factor_vec}{A factor vector to sort.}
@@ -12,22 +12,42 @@ fct_sort_custom(factor_vec, sort_func, decreasing = FALSE)
 \item{sort_func}{A function that takes a character vector (the levels) and returns a vector of the same length to sort by.}
 
 \item{decreasing}{Logical. Should the sort be decreasing? Default is \code{FALSE}.}
+
+\item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.}
 }
 \value{
-A factor vector with levels reordered according to the custom function.
+A factor vector with levels reordered according to the custom function. Depending on the \code{inplace} parameter, the data vector's elements may also be reordered.
 }
 \description{
-Reorders the levels of a factor vector based on a custom function applied to each level.
+Reorders the levels of a factor vector based on a custom function applied to each level. Optionally reorders the data vector's elements to align with the new levels' order.
 }
 \examples{
 # Example factor vector
 factor_vec <- factor(c('apple', 'banana', 'cherry'))
 
-# Sort levels by reverse alphabetical order
-fct_sort_custom(factor_vec, function(x) -rank(x))
+# Sort levels by reverse alphabetical order without reordering data elements
+sorted_custom <- fct_sort_custom(factor_vec, function(x) -rank(x))
+print(sorted_custom)
+# [1] apple  banana cherry
+# Levels: cherry banana apple
 
-# Sort levels by length of the level name
-fct_sort_custom(factor_vec, function(x) nchar(x))
+# Sort levels by reverse alphabetical order and reorder data elements
+sorted_custom_inplace <- fct_sort_custom(factor_vec, function(x) -rank(x), inplace = TRUE)
+print(sorted_custom_inplace)
+# [1] cherry banana apple
+# Levels: cherry banana apple
+
+# Sort levels by length of the level name without reordering data elements
+sorted_custom_length <- fct_sort_custom(factor_vec, function(x) nchar(x))
+print(sorted_custom_length)
+# [1] apple  banana cherry
+# Levels: apple cherry banana
+
+# Sort levels by length of the level name and reorder data elements
+sorted_custom_length_inplace <- fct_sort_custom(factor_vec, function(x) nchar(x), inplace = TRUE)
+print(sorted_custom_length_inplace)
+# [1] apple  cherry banana
+# Levels: apple cherry banana
 }
 \author{
 Kai Guo
