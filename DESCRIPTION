@@ -1,16 +1,17 @@
 Package: fctutils
 Type: Package
-Title: fctutils: Advanced Factor Manipulation Utilities for R
-Version: 0.0.3
+Title: Advanced Factor Manipulation Utilities for R
+Version: 0.0.6
 Authors@R: c(person("Kai","Guo",email = "guokai8@gmail.com",
            role = c("aut", "cre")
           ))
 Maintainer: Kai Guo <guokai8@gmail.com>
-Description: The fctutils package provides a collection of utility functions for manipulating and analyzing factor vectors in R. It offers tools for filtering, splitting, combining, and reordering factor levels based on various criteria. The package is designed to simplify common tasks in data preprocessing and categorical data analysis, making it easier to work with factors in a flexible and efficient manner.
+Description: The package provides a collection of utility functions for manipulating and analyzing factor vectors in R. It offers tools for filtering, splitting, combining, and reordering factor levels based on various criteria. The package is designed to simplify common tasks in categorical data analysis, making it easier to work with factors in a flexible and efficient manner.
 License: GPL-3
 Imports:
     stringr,
     stringdist,
+    utils,
     stats
 Encoding: UTF-8
 LazyData: yes
