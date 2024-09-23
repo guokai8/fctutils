@@ -4,7 +4,7 @@
 \alias{fct_replace_pattern}
 \title{Replace Parts of Factor Levels Based on a Pattern}
 \usage{
-fct_replace_pattern(factor_vec, pattern, replacement)
+fct_replace_pattern(factor_vec, pattern, replacement, replace_all = TRUE)
 }
 \arguments{
 \item{factor_vec}{A factor vector to be modified.}
@@ -12,6 +12,8 @@ fct_replace_pattern(factor_vec, pattern, replacement)
 \item{pattern}{A regular expression pattern to match.}
 
 \item{replacement}{A string to replace the matched parts.}
+
+\item{replace_all}{Logical. If \code{TRUE} (default), all occurrences of the pattern are replaced. If \code{FALSE}, only the first occurrence is replaced.}
 }
 \value{
 A factor vector with levels modified.
@@ -23,8 +25,11 @@ Replaces parts of the factor levels that match a specified pattern with a new st
 # Example factor vector
 factor_vec <- factor(c('apple_pie', 'banana_bread', 'cherry_cake'))
 
-# Replace '_pie', '_bread', '_cake' with '_dessert'
+# Replace '_pie', '_bread', '_cake' with '_dessert' (all occurrences)
 fct_replace_pattern(factor_vec, pattern = '_.*', replacement = '_dessert')
+
+# Replace only the first occurrence of '_' with '-'
+fct_replace_pattern(factor_vec, pattern = '_', replacement = '-', replace_all = FALSE)
 }
 \author{
 Kai Guo

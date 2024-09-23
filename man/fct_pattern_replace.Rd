@@ -2,7 +2,7 @@
 % Please edit documentation in R/fct_misc.R
 \name{fct_pattern_replace}
 \alias{fct_pattern_replace}
-\title{Replace Patterns in Factor Levels}
+\title{Replace Patterns in Factor Levels (Deprecated)}
 \usage{
 fct_pattern_replace(factor_vec, pattern, replacement)
 }
@@ -17,15 +17,14 @@ fct_pattern_replace(factor_vec, pattern, replacement)
 A factor vector with modified levels.
 }
 \description{
-Replaces substrings in factor levels that match a pattern with a replacement string.
+This function is deprecated. Please use \code{\link{fct_replace_pattern}} instead.
 }
 \examples{
-# Example factor vector
+# Deprecated: Use fct_replace_pattern instead
 factor_vec <- factor(c('user_123', 'admin_456', 'guest_789'))
-
-# Replace numeric IDs with 'ID'
-fct_pattern_replace(factor_vec, pattern = '[0-9]+', replacement = 'ID')
+fct_replace_pattern(factor_vec, pattern = '[0-9]+', replacement = 'ID')
 }
 \author{
 Kai Guo
 }
+\keyword{internal}
