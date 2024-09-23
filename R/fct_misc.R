@@ -422,35 +422,23 @@ fct_rollup <- function(factor_vec, groups) {
 
   return(factor_vec_aggregated)
 }
-#' @title Replace Patterns in Factor Levels
-#' @description Replaces substrings in factor levels that match a pattern with a replacement string.
+
+#' @title Replace Patterns in Factor Levels (Deprecated)
+#' @description This function is deprecated. Please use \code{\link{fct_replace_pattern}} instead.
 #' @param factor_vec A factor vector to modify.
 #' @param pattern A regular expression pattern to match.
 #' @param replacement A string to replace the matched patterns.
 #' @return A factor vector with modified levels.
 #' @examples
-#' # Example factor vector
+#' # Deprecated: Use fct_replace_pattern instead
 #' factor_vec <- factor(c('user_123', 'admin_456', 'guest_789'))
-#'
-#' # Replace numeric IDs with 'ID'
-#' fct_pattern_replace(factor_vec, pattern = '[0-9]+', replacement = 'ID')
+#' fct_replace_pattern(factor_vec, pattern = '[0-9]+', replacement = 'ID')
 #' @export
+#' @keywords internal
 #' @author Kai Guo
 fct_pattern_replace <- function(factor_vec, pattern, replacement) {
-  if(!is.factor(factor_vec)){
-    factor_vec <- as.factor(factor_vec)
-  }
-  if (!is.character(pattern) || length(pattern) != 1) {
-    stop("The 'pattern' must be a single string representing a regular expression.")
-  }
-  if (!is.character(replacement) || length(replacement) != 1) {
-    stop("The 'replacement' must be a single string.")
-  }
-
-  new_levels <- gsub(pattern, replacement, levels(factor_vec))
-  factor_vec_modified <- factor(factor_vec, levels = levels(factor_vec), labels = new_levels)
-
-  return(factor_vec_modified)
+  .Deprecated("fct_replace_pattern")
+  fct_replace_pattern(factor_vec, pattern, replacement, replace_all = TRUE)
 }
 ###
 #' @title Calculate Statistics for Each Factor Level
