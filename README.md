@@ -1,4 +1,4 @@
-# fctutils <img src='logo.png' align="right" height="139" />
+# <img src='logo.png' align="right" height="139" />
 # fctutils: Advanced Factor Manipulation Utilities for R
  [![Project Status:](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)  [![](https://img.shields.io/badge/devel%20version-0.0.6-green.svg)](https://github.com/guokai8/fctutils)  ![Code Size:](https://img.shields.io/github/languages/code-size/guokai8/fctutils)
 
