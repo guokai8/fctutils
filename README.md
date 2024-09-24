@@ -319,7 +319,7 @@ _fct_apply_ Transforms factor levels by applying a function to each level.
 _fct_encode_ Converts the levels of a factor vector into numeric codes, optionally using a provided mapping. 
 
 ## 3. Summary
-The `fctutils` package provides a comprehensive set of functions to efficiently manage and manipulate factor vectors in R. From ordering and sorting to replacing, filtering, merging, and beyond, these tools enhance your ability to handle categorical data with ease. The additional essential functions further extend the package's capabilities, ensuring that all common factor operations are covered. I might change the log in the future ^^
+The `fctutils` package provides a comprehensive set of functions to efficiently manage and manipulate factor vectors in R. From ordering and sorting to replacing, filtering, merging, and beyond, these tools enhance your ability to handle categorical data with ease. The additional essential functions further extend the package's capabilities, ensuring that all common factor operations are covered. I might change the logo in the future ^^
 
 ## 4. Contact information
 For any questions please contact guokai8@gmail.com or submit the issues to https://github.com/guokai8/fctutils/issues
