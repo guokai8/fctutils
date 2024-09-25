@@ -19,7 +19,7 @@
 #'
 #' # Use a custom preprocessing function to convert factor_vec to lower case
 #' fct_pairs(vec, pre_fn = function(x) tolower(trimws(x)))
-#' fct_paris(vec, ref = c("A","C"))
+#' fct_pairs(vec, ref = c("A","C"))
 #' @export
 fct_pairs <- function(factor_vec, ref = NULL, symmetric = TRUE,
                                     include_na = FALSE, include_self = FALSE, filter_fn = NULL,
