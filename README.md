@@ -249,7 +249,11 @@ fct_pairs(vec)
 # Use a custom preprocessing function to convert factor_vec to lower case
 fct_pairs(vec, pre_fn = function(x) tolower(trimws(x)))
 fct_pairs(vec, ref = c("A","C"))
-
+elements <- c('apple', 'apricot', 'banana', 'blueberry', 'cherry', 'cranberry')
+filter_fn <- function(df) {
+  substr(df$Var1, 1, 1) == substr(df$Var2, 1, 1)
+}
+pairs <- fct_pairs(elements, filter_fn = filter_fn)
 ```
 
 
