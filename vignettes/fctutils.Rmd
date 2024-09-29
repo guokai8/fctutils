@@ -251,6 +251,20 @@ fct_insert(factor_vec, insert = 'honeydew', pattern = '^c')
 factor_vec_na <- factor(c('apple', NA, 'banana', 'cherry', NA, 'date'))
 fct_insert(factor_vec_na, insert = 'lychee', insert_after_na = TRUE)
 ```
+_fct_pairs_ Creates all unique pairwise combinations between factor_vec of a vector, with options for references, symmetry, NA handling, custom filtering, and output formats. Automatically handles factors by converting them to vectors and removes extra spaces from factor_vec before processing.
+```{r}
+vec <- c(' A', 'b ', ' C ', 'D')
+# Generate pairwise comparisons within vec
+fct_pairs(vec)
+# Use a custom preprocessing function to convert factor_vec to lower case
+fct_pairs(vec, pre_fn = function(x) tolower(trimws(x)))
+fct_pairs(vec, ref = c("A","C"))
+elements <- c('apple', 'apricot', 'banana', 'blueberry', 'cherry', 'cranberry')
+filter_fn <- function(df) {
+  substr(df$Var1, 1, 1) == substr(df$Var2, 1, 1)
+}
+pairs <- fct_pairs(elements, filter_fn = filter_fn)
+```
 
 _fct_intersect_ Combines multiple factor vectors and returns a factor vector containing only the levels common to all.
 ```{r}
