@@ -10,13 +10,13 @@
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
 #'
 #' # replace 'banana' as 'blueberry', and keep original order
-#' fct_replace(factor_vec, old_level = 'banana', new_level = 'blueberry')
+#' ft_replace(factor_vec, old_level = 'banana', new_level = 'blueberry')
 #'
 #' # replace 'banana' as 'blueberry'
-#' fct_replace(factor_vec, old_level = 'banana', new_level = 'blueberry', position = 2)
+#' ft_replace(factor_vec, old_level = 'banana', new_level = 'blueberry', position = 2)
 #' @export
 #' @author Kai Guo
-fct_replace <- function(factor_vec, old_level, new_level, position = NULL) {
+ft_replace <- function(factor_vec, old_level, new_level, position = NULL) {
   #
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -80,13 +80,13 @@ fct_replace <- function(factor_vec, old_level, new_level, position = NULL) {
 #' factor_vec <- factor(c('apple_pie', 'banana_bread', 'cherry_cake'))
 #'
 #' # Replace '_pie', '_bread', '_cake' with '_dessert' (all occurrences)
-#' fct_replace_pattern(factor_vec, pattern = '_.*', replacement = '_dessert')
+#' ft_replace_pattern(factor_vec, pattern = '_.*', replacement = '_dessert')
 #'
 #' # Replace only the first occurrence of '_' with '-'
-#' fct_replace_pattern(factor_vec, pattern = '_', replacement = '-', replace_all = FALSE)
+#' ft_replace_pattern(factor_vec, pattern = '_', replacement = '-', replace_all = FALSE)
 #' @export
 #' @author Kai Guo
-fct_replace_pattern <- function(factor_vec, pattern, replacement, replace_all = TRUE) {
+ft_replace_pattern <- function(factor_vec, pattern, replacement, replace_all = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -127,10 +127,10 @@ fct_replace_pattern <- function(factor_vec, pattern, replacement, replace_all = 
 #' factor_vec2 <- factor(c('banana', 'date', 'fig', 'grape'))
 #'
 #' # Merge factors and retain unique levels
-#' fct_merge(factor_vec1, factor_vec2)
+#' ft_merge(factor_vec1, factor_vec2)
 #' @export
 #' @author Kai Guo
-fct_merge <- function(factor_vec1, factor_vec2, level_order = NULL) {
+ft_merge <- function(factor_vec1, factor_vec2, level_order = NULL) {
   #
   if(!is.factor(factor_vec1) || !is.factor(factor_vec2)){
     factor_vec1 <- as.factor(factor_vec1)

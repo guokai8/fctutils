@@ -19,7 +19,7 @@
 #' # Example 1: Insert 'date' after position 2 and 'grape' after position 4
 #' # without allowing duplicates, returning a new factor vector
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
-#' new_factor <- fct_insert(
+#' new_factor <- ft_insert(
 #'   factor_vec,
 #'   insert = c('date', 'grape'),
 #'   positions = c(2, 4),
@@ -31,7 +31,7 @@
 #'
 #' # Example 2: Insert 'date' after position 2 and 'grape' after position 4,
 #' # allowing duplicates, returning a new factor vector
-#' new_factor_dup <- fct_insert(
+#' new_factor_dup <- ft_insert(
 #'   factor_vec,
 #'   insert = c('date', 'grape'),
 #'   positions = c(2, 4),
@@ -44,7 +44,7 @@
 #'
 #' # Example 3: Insert 'date' after position 2 and 'grape' after position 4,
 #' # and reorder data elements
-#' new_factor_inplace <- fct_insert(
+#' new_factor_inplace <- ft_insert(
 #'   factor_vec,
 #'   insert = c('date', 'grape'),
 #'   positions = c(2, 4),
@@ -57,7 +57,7 @@
 #' # Example 4: Insert 'kiwi' after 'banana' and 'grape', case-sensitive,
 #' # allowing duplicates, returning a new factor vector
 #' factor_vec_case <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
-#' new_factor_case <- fct_insert(
+#' new_factor_case <- ft_insert(
 #'   factor_vec_case,
 #'   insert = c('kiwi', 'kiwi'),
 #'   target = c('banana', 'grape'),
@@ -67,11 +67,10 @@
 #' )
 #' print(new_factor_case)
 #' # [1] Apple   banana  Cherry  date    Fig     grape   kiwi    kiwi.1
-#' # Levels: Apple banana Cherry date Fig grape kiwi kiwi.1
 #'
 #' # Example 5: Insert 'lychee' after NA, returning a new factor vector
 #' factor_vec_na <- factor(c('apple', NA, 'banana', 'cherry', NA, 'date'))
-#' new_factor_na <- fct_insert(
+#' new_factor_na <- ft_insert(
 #'   factor_vec_na,
 #'   insert = 'lychee',
 #'   insert_after_na = TRUE,
@@ -79,10 +78,12 @@
 #' )
 #' print(new_factor_na)
 #' # [1] apple  <NA>    lychee banana cherry <NA>    date
-#' # Levels: apple <NA> lychee banana cherry date
+#' # Example 6:
+#' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
+#  ft_insert(factor_vec, insert = 'date', target = 'banana', inplace = TRUE)
 #' @export
 #' @author Kai Guo
-fct_insert <- function(factor_vec, insert, target = NULL, positions = NULL, pattern = NULL,
+ft_insert <- function(factor_vec, insert, target = NULL, positions = NULL, pattern = NULL,
                        case = FALSE, insert_after_na = FALSE, allow_duplicates = FALSE, inplace = FALSE) {
   # Input validation
   if (!is.factor(factor_vec)) {

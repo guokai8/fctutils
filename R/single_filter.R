@@ -12,16 +12,16 @@
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'banana', 'apple', 'fig', NA))
 #'
 #' # Filter levels occurring less than 2 times and reorder by character frequency
-#' fct_filter_freq(factor_vec, min_freq = 2)
+#' ft_filter_freq(factor_vec, min_freq = 2)
 #'
 #' # Filter levels, remove NA values, and return additional information
-#' result <- fct_filter_freq(factor_vec, min_freq = 2, na.rm = TRUE, return_info = TRUE)
+#' result <- ft_filter_freq(factor_vec, min_freq = 2, na.rm = TRUE, return_info = TRUE)
 #' result$filtered_factor
 #' result$removed_levels
 #' result$char_freq_table
 #' @export
 #' @author Kai Guo
-fct_filter_freq <- function(factor_vec, min_freq = 1, na.rm = FALSE, case = FALSE, decreasing = TRUE, return_info = FALSE) {
+ft_filter_freq <- function(factor_vec, min_freq = 1, na.rm = FALSE, case = FALSE, decreasing = TRUE, return_info = FALSE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -62,7 +62,7 @@ fct_filter_freq <- function(factor_vec, min_freq = 1, na.rm = FALSE, case = FALS
   # Drop unused levels
   filtered_factor_vec <- droplevels(filtered_factor_vec)
 
-  # Proceed to calculate character frequencies using fct_freq logic
+  # Proceed to calculate character frequencies using ft_freq logic
   factor_chars <- as.character(filtered_factor_vec)
 
   # Handle case sensitivity
@@ -124,17 +124,17 @@ fct_filter_freq <- function(factor_vec, min_freq = 1, na.rm = FALSE, case = FALS
 #' factor_vec <- factor(c('apple', 'banana', 'apricot', 'cherry', 'date', 'fig', 'grape'))
 #'
 #' # Remove levels where 'a' appears at position 1
-#' fct_filter_pos(factor_vec, positions = 1, char = 'a')
+#' ft_filter_pos(factor_vec, positions = 1, char = 'a')
 #'
 #' # Remove levels where 'e' appears at positions 2 or 3
-#' fct_filter_pos(factor_vec, positions = c(2, 3), char = 'e')
+#' ft_filter_pos(factor_vec, positions = c(2, 3), char = 'e')
 #'
 #' # Case-sensitive removal
 #' factor_vec_case <- factor(c('Apple', 'banana', 'Apricot', 'Cherry', 'Date', 'Fig', 'grape'))
-#' fct_filter_pos(factor_vec_case, positions = 1, char = 'A', case = TRUE)
+#' ft_filter_pos(factor_vec_case, positions = 1, char = 'A', case = TRUE)
 #' @export
 #' @author Kai Guo
-fct_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, remove_na = TRUE, invert = FALSE, .return = FALSE) {
+ft_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, remove_na = TRUE, invert = FALSE, .return = FALSE) {
   # Input validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -228,10 +228,10 @@ fct_filter_pos <- function(factor_vec, positions = NULL, char, case = FALSE, rem
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
 #'
 #' # Remove levels 'banana' and 'date'
-#' fct_remove_levels(factor_vec, levels_to_remove = c('banana', 'date'))
+#' ft_remove_levels(factor_vec, levels_to_remove = c('banana', 'date'))
 #' @export
 #' @author Kai Guo
-fct_remove_levels <- function(factor_vec, levels_to_remove, remove_na = TRUE) {
+ft_remove_levels <- function(factor_vec, levels_to_remove, remove_na = TRUE) {
   #
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)

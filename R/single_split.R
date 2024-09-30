@@ -13,22 +13,22 @@
 #' # Example 1: Split by patterns '-', '_', or '|' and reorder based on the
 #' # first part without reordering data elements
 #' factor_vec <- factor(c('item1-sub1', 'item2_sub2', 'item3|sub3', 'item1-sub4'))
-#' fct_split(factor_vec, split_pattern = c('-', '_', '\\|'), part = 1, inplace = FALSE)
+#' ft_split(factor_vec, split_pattern = c('-', '_', '\\|'), part = 1, inplace = FALSE)
 #'
 #' # Example 2: Use the second pattern '_' for splitting and reorder
 #' # data elements
-#' fct_split(factor_vec, split_pattern = c('-', '_', '\\|'), use_pattern = 2, part = 2, inplace = TRUE)
+#' ft_split(factor_vec, split_pattern = c('-', '_', '\\|'), use_pattern = 2, part = 2, inplace = TRUE)
 #'
 #' # Example 3: Reorder based on character frequencies in the specified part
 #' # without reordering data elements
-#' fct_split(factor_vec, split_pattern = '-', part = 2, char_freq = TRUE, inplace = FALSE)
+#' ft_split(factor_vec, split_pattern = '-', part = 2, char_freq = TRUE, inplace = FALSE)
 #'
 #' # Example 4: Split by pattern '-' and reorder both levels and data
 #' # elements based on the first part
-#' fct_split(factor_vec, split_pattern = '-', part = 1, inplace = TRUE)
+#' ft_split(factor_vec, split_pattern = '-', part = 1, inplace = TRUE)
 #' @export
 #' @author Kai Guo
-fct_split <- function(factor_vec, split_pattern, use_pattern = NULL, part = 1,
+ft_split <- function(factor_vec, split_pattern, use_pattern = NULL, part = 1,
                       position = NULL, char_freq = FALSE, decreasing = FALSE,
                       inplace = FALSE) {
   # Parameter validation

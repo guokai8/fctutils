@@ -10,7 +10,7 @@
 #' # Example 1: Reorder levels based on characters at positions 2 and 4
 #' # without reordering data elements
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
-#' new <- fct_pos(
+#' new <- ft_pos(
 #'   factor_vec,
 #'   positions = c(2, 4),
 #'   case = FALSE,
@@ -23,7 +23,7 @@
 #'
 #' # Example 2: Reorder levels based on characters at positions 2 and 4
 #' # and reorder data elements
-#' new_inplace <- fct_pos(
+#' new_inplace <- ft_pos(
 #'   factor_vec,
 #'   positions = c(2, 4),
 #'   case = FALSE,
@@ -36,7 +36,7 @@
 #'
 #' # Example 3: Reorder levels in decreasing order based on characters at
 #' # positions 1 and 3 without reordering data elements
-#' new_dec <- fct_pos(
+#' new_dec <- ft_pos(
 #'   factor_vec,
 #'   positions = c(1, 3),
 #'   case = FALSE,
@@ -49,7 +49,7 @@
 #'
 #' # Example 4: Reorder levels with case sensitivity and reorder data elements
 #' factor_vec_case <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
-#' new_case <- fct_pos(
+#' new_case <- ft_pos(
 #'   factor_vec_case,
 #'   positions = c(1, 2),
 #'   case = TRUE,
@@ -63,7 +63,7 @@
 #' # Example 5: Reorder levels based on characters at positions 3, allowing
 #' # insertion at positions beyond string length
 #' factor_vec_short <- factor(c('go', 'dog', 'cat', 'bird'))
-#' new_short <- fct_pos(
+#' new_short <- ft_pos(
 #'   factor_vec_short,
 #'   positions = c(3),
 #'   case = FALSE,
@@ -75,7 +75,7 @@
 #' # Levels: cat dog bird go
 #' @export
 #' @author Kai Guo
-fct_pos <- function(factor_vec, positions, case = FALSE, decreasing = FALSE, inplace = FALSE) {
+ft_pos <- function(factor_vec, positions, case = FALSE, decreasing = FALSE, inplace = FALSE) {
   # Parameter validation
   if (!is.factor(factor_vec)) {
     factor_vec <- as.factor(factor_vec)
@@ -164,13 +164,13 @@ fct_pos <- function(factor_vec, positions, case = FALSE, decreasing = FALSE, inp
 #' factor_vec <- factor(c('apple', 'banana', 'apple', 'cherry', 'banana', 'banana', 'date'))
 #'
 #' # Reorder levels by decreasing count
-#' fct_count(factor_vec)
+#' ft_count(factor_vec)
 #'
 #' # Reorder levels by increasing count
-#' fct_count(factor_vec, decreasing = FALSE)
+#' ft_count(factor_vec, decreasing = FALSE)
 #' @export
 #' @author Kai Guo
-fct_count <- function(factor_vec, decreasing = TRUE, inplace = FALSE) {
+ft_count <- function(factor_vec, decreasing = TRUE, inplace = FALSE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -225,13 +225,13 @@ fct_count <- function(factor_vec, decreasing = TRUE, inplace = FALSE) {
 #' factor_vec <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
 #'
 #' # Reorder based on substring from position 2 to 4
-#' fct_sub(factor_vec, start_pos = 2, end_pos = 4)
+#' ft_sub(factor_vec, start_pos = 2, end_pos = 4)
 #'
 #' # Reorder from position 3 to end, case-sensitive
-#' fct_sub(factor_vec, start_pos = 3, case = TRUE)
+#' ft_sub(factor_vec, start_pos = 3, case = TRUE)
 #' @export
 #' @author Kai Guo
-fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, decreasing = FALSE, inplace = TRUE) {
+ft_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, decreasing = FALSE, inplace = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -329,7 +329,7 @@ fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, 
 #' @examples
 #' # Example 1: Reorder levels based on character frequency without reordering data elements
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
-#' new <- fct_freq(
+#' new <- ft_freq(
 #'   factor_vec,
 #'   case = FALSE,
 #'   decreasing = TRUE,
@@ -340,7 +340,7 @@ fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, 
 #' # Levels: apple banana date cherry fig grape
 #'
 #' # Example 2: Reorder levels based on character frequency and reorder data elements
-#' new_inplace <- fct_freq(
+#' new_inplace <- ft_freq(
 #'   factor_vec,
 #'   case = FALSE,
 #'   decreasing = TRUE,
@@ -352,7 +352,7 @@ fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, 
 #'
 #' # Example 3: Reorder levels in decreasing order based on character frequency
 #' # without reordering data elements
-#' new_dec <- fct_freq(
+#' new_dec <- ft_freq(
 #'   factor_vec,
 #'   case = FALSE,
 #'   decreasing = TRUE,
@@ -364,7 +364,7 @@ fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, 
 #'
 #' # Example 4: Reorder levels with case sensitivity and reorder data elements
 #' factor_vec_case <- factor(c('Apple', 'banana', 'Cherry', 'date', 'Fig', 'grape'))
-#' new_case <- fct_freq(
+#' new_case <- ft_freq(
 #'   factor_vec_case,
 #'   case = TRUE,
 #'   decreasing = TRUE,
@@ -376,7 +376,7 @@ fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, 
 #'
 #' # Example 5: Reorder levels based on character frequency, allowing insertion beyond string length
 #' factor_vec_short <- factor(c('go', 'dog', 'cat', 'bird'))
-#' new_short <- fct_freq(
+#' new_short <- ft_freq(
 #'   factor_vec_short,
 #'   case = FALSE,
 #'   decreasing = TRUE,
@@ -387,7 +387,7 @@ fct_sub <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, 
 #' # Levels: cat dog bird go
 #' @export
 #' @author Kai Guo
-fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE, inplace = FALSE) {
+ft_freq <- function(factor_vec, case = FALSE, decreasing = TRUE, inplace = FALSE) {
   # Parameter validation
   if (!is.factor(factor_vec)) {
     factor_vec <- as.factor(factor_vec)
@@ -477,13 +477,13 @@ fct_freq <- function(factor_vec, case = FALSE, decreasing = TRUE, inplace = FALS
 #' factor_vec <- factor(c('apple', 'banana', 'apricot', 'cherry', 'banana', 'banana', 'date'))
 #'
 #' # Reorder based on characters at positions 1 and 2
-#' fct_char_freq(factor_vec, positions = 1:2)
+#' ft_char_freq(factor_vec, positions = 1:2)
 #'
 #' # Reorder, case-sensitive, decreasing order
-#' fct_char_freq(factor_vec, positions = c(1, 3), case = TRUE)
+#' ft_char_freq(factor_vec, positions = c(1, 3), case = TRUE)
 #' @export
 #' @author Kai Guo
-fct_char_freq <- function(factor_vec, positions, case = FALSE, decreasing = TRUE, inplace = TRUE) {
+ft_char_freq <- function(factor_vec, positions, case = FALSE, decreasing = TRUE, inplace = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -587,12 +587,12 @@ fct_char_freq <- function(factor_vec, positions, case = FALSE, decreasing = TRUE
 #' # Example factor vector with multi-byte characters
 #' factor_vec <- factor(c('apple', 'banana', 'apricot', 'cherry', 'banana', 'banana', 'date'))
 #' # Reorder from position 2 to end
-#' fct_substr_freq(factor_vec, start_pos = 2)
+#' ft_substr_freq(factor_vec, start_pos = 2)
 #' factor_vec <- factor(c('apple', 'banana', 'apricot', 'cherry', 'banana', 'banana', 'date'))
-#' fct_substr_freq(factor_vec, start_pos = 2, end_pos=3)
+#' ft_substr_freq(factor_vec, start_pos = 2, end_pos=3)
 #' @export
 #' @author Kai Guo
-fct_substr_freq <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, decreasing = TRUE, inplace = TRUE) {
+ft_substr_freq <- function(factor_vec, start_pos = NULL, end_pos = NULL, case = FALSE, decreasing = TRUE, inplace = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -709,13 +709,13 @@ fct_substr_freq <- function(factor_vec, start_pos = NULL, end_pos = NULL, case =
 #' factor_vec <- factor(c('apple', 'banana', 'apricot', 'cherry', 'blueberry', 'blackberry', 'date'))
 #'
 #' # Reorder based on pattern matching 'a'
-#' fct_regex_freq(factor_vec, pattern = 'a')
+#' ft_regex_freq(factor_vec, pattern = 'a')
 #'
 #' # Reorder with case-sensitive matching
-#' fct_regex_freq(factor_vec, pattern = '^[A-Z]', case = TRUE)
+#' ft_regex_freq(factor_vec, pattern = '^[A-Z]', case = TRUE)
 #' @export
 #' @author Kai Guo
-fct_regex_freq <- function(factor_vec, pattern, case = FALSE, decreasing = TRUE, inplace = TRUE) {
+ft_regex_freq <- function(factor_vec, pattern, case = FALSE, decreasing = TRUE, inplace = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -805,13 +805,13 @@ fct_regex_freq <- function(factor_vec, pattern, case = FALSE, decreasing = TRUE,
 #' factor_vec <- factor(c('apple', NA, 'banana', 'cherry', NA, 'date'))
 #'
 #' # Keep NA as a level
-#' fct_na(factor_vec, keep_na = TRUE)
+#' ft_na(factor_vec, keep_na = TRUE)
 #'
 #' # Remove NA values
-#' fct_na(factor_vec, keep_na = FALSE)
+#' ft_na(factor_vec, keep_na = FALSE)
 #' @export
 #' @author Kai Guo
-fct_na <- function(factor_vec, keep_na = TRUE) {
+ft_na <- function(factor_vec, keep_na = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -846,13 +846,13 @@ fct_na <- function(factor_vec, keep_na = TRUE) {
 #' factor_vec <- factor(c('apple', 'banana', NA, 'cherry', 'date', NA, 'fig', 'grape'), exclude = NULL)
 #'
 #' # Get character frequencies (case-insensitive), excluding NA levels
-#' fct_table(factor_vec)
+#' ft_table(factor_vec)
 #'
 #' # Include NA levels in the character frequencies
-#' fct_table(factor_vec, include_na = TRUE)
+#' ft_table(factor_vec, include_na = TRUE)
 #' @export
 #' @author Kai Guo
-fct_table <- function(factor_vec, case = FALSE, include_na = FALSE, as_table = TRUE) {
+ft_table <- function(factor_vec, case = FALSE, include_na = FALSE, as_table = TRUE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -907,10 +907,10 @@ fct_table <- function(factor_vec, case = FALSE, include_na = FALSE, as_table = T
 #' factor_vec <- factor(c('apple_red', 'apple_green', 'banana_yellow', 'banana_green', 'cherry_red'))
 #'
 #' # Group by first 5 characters (common prefix)
-#' fct_group_by_prefix(factor_vec, prefix_length = 5)
+#' ft_group_by_prefix(factor_vec, prefix_length = 5)
 #' @export
 #' @author Kai Guo
-fct_group_by_prefix <- function(factor_vec, prefix_length) {
+ft_group_by_prefix <- function(factor_vec, prefix_length) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -947,10 +947,10 @@ fct_group_by_prefix <- function(factor_vec, prefix_length) {
 #' factor_vec <- factor(c('red_large', 'blue_small', 'green_medium'))
 #'
 #' # Split levels into two factors
-#' fct_split_levels(factor_vec, delimiter = '_')
+#' ft_split_levels(factor_vec, delimiter = '_')
 #' @export
 #' @author Kai Guo
-fct_split_levels <- function(factor_vec, delimiter, names = NULL) {
+ft_split_levels <- function(factor_vec, delimiter, names = NULL) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }

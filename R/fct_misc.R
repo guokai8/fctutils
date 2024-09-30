@@ -9,10 +9,10 @@
 #' factor_vec3 <- factor(c('banana', 'cherry', 'fig'))
 #'
 #' # Get intersection of levels
-#' fct_intersect(factor_vec1, factor_vec2, factor_vec3)
+#' ft_intersect(factor_vec1, factor_vec2, factor_vec3)
 #' @export
 #' @author Kai Guo
-fct_intersect <- function(...) {
+ft_intersect <- function(...) {
   factors <- list(...)
   # Parameter validation
   if (length(factors) < 2) {
@@ -48,10 +48,10 @@ fct_intersect <- function(...) {
 #' factor_vec3 <- factor(c('date', 'fig'))
 #'
 #' # Get union of levels
-#' fct_union(factor_vec1, factor_vec2, factor_vec3)
+#' ft_union(factor_vec1, factor_vec2, factor_vec3)
 #' @export
 #' @author Kai Guo
-fct_union <- function(...) {
+ft_union <- function(...) {
   factors <- list(...)
   if (length(factors) < 2) {
     stop("At least two factor vectors must be provided.")
@@ -89,10 +89,10 @@ fct_union <- function(...) {
 #' )
 #' data <- rbind(data, data)
 #' # Reorder 'item' within 'group' by 'value'
-#' data$item <- fct_reorder_within(data$item, data$group, data$value, mean)
+#' data$item <- ft_reorder_within(data$item, data$group, data$value, mean)
 #' @export
 #' @author Kai Guo
-fct_reorder_within <- function(factor_vec, group_vec, by, fun = mean, decreasing = FALSE) {
+ft_reorder_within <- function(factor_vec, group_vec, by, fun = mean, decreasing = FALSE) {
   # Parameter validation
   if (!is.factor(factor_vec) || !is.factor(group_vec)) {
     factor_vec <- as.factor(factor_vec)
@@ -138,19 +138,19 @@ fct_reorder_within <- function(factor_vec, group_vec, by, fun = mean, decreasing
 #' factor_vec <- factor(c('low', 'medium', 'high'))
 #'
 #' # Reverse the levels without reordering data elements
-#' reversed_factor <- fct_reverse(factor_vec)
+#' reversed_factor <- ft_reverse(factor_vec)
 #' print(reversed_factor)
 #' # [1] low    medium high
 #' # Levels: high medium low
 #'
 #' # Reverse the levels and reorder data elements
-#' reversed_factor_inplace <- fct_reverse(factor_vec, inplace = TRUE)
+#' reversed_factor_inplace <- ft_reverse(factor_vec, inplace = TRUE)
 #' print(reversed_factor_inplace)
 #' # [1] high   medium low
 #' # Levels: high medium low
 #' @export
 #' @author Kai Guo
-fct_reverse <- function(factor_vec, inplace = FALSE) {
+ft_reverse <- function(factor_vec, inplace = FALSE) {
   # Parameter validation
   if (!is.factor(factor_vec)) {
     factor_vec <- as.factor(factor_vec)
@@ -199,19 +199,19 @@ fct_reverse <- function(factor_vec, inplace = FALSE) {
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date'))
 #'
 #' # Sort levels by length without reordering data elements
-#' sorted_factor <- fct_len(factor_vec)
+#' sorted_factor <- ft_len(factor_vec)
 #' print(sorted_factor)
 #' # [1] apple  banana cherry date
 #' # Levels: apple date banana cherry
 #'
 #' # Sort levels by length and reorder data elements
-#' sorted_factor_inplace <- fct_len(factor_vec, inplace = TRUE)
+#' sorted_factor_inplace <- ft_len(factor_vec, inplace = TRUE)
 #' print(sorted_factor_inplace)
 #' # [1] date   apple  banana cherry
 #' # Levels: apple date banana cherry
 #' @export
 #' @author Kai Guo
-fct_len <- function(factor_vec, decreasing = FALSE, inplace = FALSE) {
+ft_len <- function(factor_vec, decreasing = FALSE, inplace = FALSE) {
   # Parameter validation
   if (!is.factor(factor_vec)) {
     factor_vec <- as.factor(factor_vec)
@@ -270,18 +270,18 @@ fct_len <- function(factor_vec, decreasing = FALSE, inplace = FALSE) {
 #' vector2 <- c('date', 'fig', 'grape', 'honeydew')
 #'
 #' # Combine and sort based on vector1 levels
-#' combined_factor1 <- fct_combine(vector1, vector2, sort_by = 1)
+#' combined_factor1 <- ft_combine(vector1, vector2, sort_by = 1)
 #' print(combined_factor1)
 #'
 #' # Combine and sort based on vector2 levels
-#' combined_factor2 <- fct_combine(vector1, vector2, sort_by = 2)
+#' combined_factor2 <- ft_combine(vector1, vector2, sort_by = 2)
 #' print(combined_factor2)
 #'
 #' # Combine with decreasing order based on vector1
-#' combined_factor3 <- fct_combine(vector1, vector2, sort_by = 1, decreasing = TRUE)
+#' combined_factor3 <- ft_combine(vector1, vector2, sort_by = 1, decreasing = TRUE)
 #' print(combined_factor3)
 #' @export
-fct_combine <- function(vector1, vector2, sort_by = 1, decreasing = FALSE) {
+ft_combine <- function(vector1, vector2, sort_by = 1, decreasing = FALSE) {
   # Parameter validation
   if (!is.numeric(sort_by) || !(sort_by %in% c(1, 2))) {
     stop("The 'sort_by' parameter must be 1 or 2.")
@@ -329,14 +329,14 @@ fct_combine <- function(vector1, vector2, sort_by = 1, decreasing = FALSE) {
 #' factor_vec <- factor(c('low', 'medium', 'high', 'medium'))
 #'
 #' # Encode without mapping
-#' fct_encode(factor_vec)
+#' ft_encode(factor_vec)
 #'
 #' # Encode with custom mapping
 #' custom_mapping <- c('low' = 1, 'medium' = 2, 'high' = 3)
-#' fct_encode(factor_vec, mapping = custom_mapping)
+#' ft_encode(factor_vec, mapping = custom_mapping)
 #' @export
 #' @author Kai Guo
-fct_encode <- function(factor_vec, mapping = NULL) {
+ft_encode <- function(factor_vec, mapping = NULL) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -370,10 +370,10 @@ fct_encode <- function(factor_vec, mapping = NULL) {
 #' mapping <- c('low' = 1, 'medium' = 2, 'high' = 3)
 #'
 #' # Decode codes into factor levels
-#' fct_decode(codes, mapping = mapping)
+#' ft_decode(codes, mapping = mapping)
 #' @export
 #' @author Kai Guo
-fct_decode <- function(codes, mapping) {
+ft_decode <- function(codes, mapping) {
   if (!is.numeric(codes)) {
     stop("The 'codes' must be a numeric vector.")
   }
@@ -403,10 +403,10 @@ fct_decode <- function(codes, mapping) {
 #' groups <- c('fruit', 'fruit', 'fruit', 'dry fruit', 'dry fruit')
 #'
 #' # Aggregate levels based on groups
-#' fct_rollup(factor_vec, groups)
+#' ft_rollup(factor_vec, groups)
 #' @export
 #' @author Kai Guo
-fct_rollup <- function(factor_vec, groups) {
+ft_rollup <- function(factor_vec, groups) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -424,21 +424,21 @@ fct_rollup <- function(factor_vec, groups) {
 }
 
 #' @title Replace Patterns in Factor Levels (Deprecated)
-#' @description This function is deprecated. Please use \code{\link{fct_replace_pattern}} instead.
+#' @description This function is deprecated. Please use \code{\link{ft_replace_pattern}} instead.
 #' @param factor_vec A factor vector to modify.
 #' @param pattern A regular expression pattern to match.
 #' @param replacement A string to replace the matched patterns.
 #' @return A factor vector with modified levels.
 #' @examples
-#' # Deprecated: Use fct_replace_pattern instead
+#' # Deprecated: Use ft_replace_pattern instead
 #' factor_vec <- factor(c('user_123', 'admin_456', 'guest_789'))
-#' fct_replace_pattern(factor_vec, pattern = '[0-9]+', replacement = 'ID')
+#' ft_replace_pattern(factor_vec, pattern = '[0-9]+', replacement = 'ID')
 #' @export
 #' @keywords internal
 #' @author Kai Guo
-fct_pattern_replace <- function(factor_vec, pattern, replacement) {
-  .Deprecated("fct_replace_pattern")
-  fct_replace_pattern(factor_vec, pattern, replacement, replace_all = TRUE)
+ft_pattern_replace <- function(factor_vec, pattern, replacement) {
+  .Deprecated("ft_replace_pattern")
+  ft_replace_pattern(factor_vec, pattern, replacement, replace_all = TRUE)
 }
 ###
 #' @title Calculate Statistics for Each Factor Level
@@ -453,10 +453,10 @@ fct_pattern_replace <- function(factor_vec, pattern, replacement) {
 #' numeric_vec <- c(10, 20, 15, 25, 30)
 #'
 #' # Calculate mean for each level
-#' fct_level_stats(factor_vec, numeric_vec, stat_func = mean)
+#' ft_level_stats(factor_vec, numeric_vec, stat_func = mean)
 #' @export
 #' @author Kai Guo
-fct_level_stats <- function(factor_vec, numeric_vec, stat_func) {
+ft_level_stats <- function(factor_vec, numeric_vec, stat_func) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -489,10 +489,10 @@ fct_level_stats <- function(factor_vec, numeric_vec, stat_func) {
 #' factor_vec <- factor(c('apple', 'banana', 'cherry'))
 #'
 #' # Append '_fruit' to each level
-#' fct_apply(factor_vec, function(x) paste0(x, '_fruit'))
+#' ft_apply(factor_vec, function(x) paste0(x, '_fruit'))
 #' @export
 #' @author Kai Guo
-fct_apply <- function(factor_vec, apply_func) {
+ft_apply <- function(factor_vec, apply_func) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -516,10 +516,10 @@ fct_apply <- function(factor_vec, apply_func) {
 #' factor_vec <- factor(letters[1:10])
 #'
 #' # Sample 5 levels
-#' fct_sample_levels(factor_vec, size = 5, seed = 123)
+#' ft_sample_levels(factor_vec, size = 5, seed = 123)
 #' @export
 #' @author Kai Guo
-fct_sample_levels <- function(factor_vec, size, seed = NULL) {
+ft_sample_levels <- function(factor_vec, size, seed = NULL) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -552,17 +552,17 @@ fct_sample_levels <- function(factor_vec, size, seed = NULL) {
 #' factor_vec <- factor(c('A', 'B', 'C', 'D'))
 #'
 #' # Pad levels to width 4 using '0' as padding character
-#' padded_factor <- fct_pad_levels(factor_vec, width = 4, pad_char = '0')
+#' padded_factor <- ft_pad_levels(factor_vec, width = 4, pad_char = '0')
 #' print(levels(padded_factor))
 #' # Output: "000A" "000B" "000C" "000D"
 #'
 #' # Pad levels to width 6 using '%A' as padding string
-#' padded_factor <- fct_pad_levels(factor_vec, width = 6, pad_char = '%A')
+#' padded_factor <- ft_pad_levels(factor_vec, width = 6, pad_char = '%A')
 #' print(levels(padded_factor))
 #' # Output: "%%A%A" "%%A%B" "%%A%C" "%%A%D"
 #' @export
 #' @author Kai Guo
-fct_pad_levels <- function(factor_vec, width, pad_char) {
+ft_pad_levels <- function(factor_vec, width, pad_char) {
   if (!is.factor(factor_vec)) {
     factor_vec <- as.factor(factor_vec)
   }
@@ -608,10 +608,10 @@ fct_pad_levels <- function(factor_vec, width, pad_char) {
 #' factor_vec <- factor(c('apple', NA, 'banana', 'cherry', NA))
 #'
 #' # Replace NAs with 'Unknown'
-#' fct_replace_na(factor_vec, replacement_level = 'Unknown')
+#' ft_replace_na(factor_vec, replacement_level = 'Unknown')
 #' @export
 #' @author Kai Guo
-fct_replace_na <- function(factor_vec, replacement_level) {
+ft_replace_na <- function(factor_vec, replacement_level) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -639,10 +639,10 @@ fct_replace_na <- function(factor_vec, replacement_level) {
 #' factor_vec <- factor(c('banana', 'apple', 'cherry', 'apple', 'banana'))
 #'
 #' # Get level order
-#' fct_level_order(factor_vec)
+#' ft_level_order(factor_vec)
 #' @export
 #' @author Kai Guo
-fct_level_order <- function(factor_vec) {
+ft_level_order <- function(factor_vec) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -663,10 +663,10 @@ fct_level_order <- function(factor_vec) {
 #' factor_vec <- factor(c('apple', 'banana', 'apple', 'cherry'))
 #'
 #' # Create dummy variables
-#' fct_dummy(factor_vec)
+#' ft_dummy(factor_vec)
 #' @export
 #' @author Kai Guo
-fct_dummy <- function(factor_vec) {
+ft_dummy <- function(factor_vec) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -687,10 +687,10 @@ fct_dummy <- function(factor_vec) {
 #' factor_vec <- factor(c('apple', 'banana', 'cherry'))
 #'
 #' # Get level lengths
-#' fct_level_lengths(factor_vec)
+#' ft_level_lengths(factor_vec)
 #' @export
 #' @author Kai Guo
-fct_level_lengths <- function(factor_vec) {
+ft_level_lengths <- function(factor_vec) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -710,10 +710,10 @@ fct_level_lengths <- function(factor_vec) {
 #' factor_vec <- factor(c('apple', 'banana', 'apple', 'cherry', 'banana'))
 #'
 #' # Flag duplicates
-#' fct_duplicates(factor_vec)
+#' ft_duplicates(factor_vec)
 #' @export
 #' @author Kai Guo
-fct_duplicates <- function(factor_vec) {
+ft_duplicates <- function(factor_vec) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -738,10 +738,10 @@ fct_duplicates <- function(factor_vec) {
 #' )
 #'
 #' # Collapse levels
-#' fct_collapse_lev(factor_vec, groups)
+#' ft_collapse_lev(factor_vec, groups)
 #' @export
 #' @author Kai Guo
-fct_collapse_lev <- function(factor_vec, groups) {
+ft_collapse_lev <- function(factor_vec, groups) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -772,14 +772,14 @@ fct_collapse_lev <- function(factor_vec, groups) {
 #' factor_vec <- factor(c('item123', 'item456', 'item789'))
 #'
 #' # Extract numeric part
-#' fct_extract(factor_vec, pattern = '\\d+')
+#' ft_extract(factor_vec, pattern = '\\d+')
 #'
 #' # Extract with capturing group
 #' factor_vec <- factor(c('apple: red', 'banana: yellow', 'cherry: red'))
-#' fct_extract(factor_vec, pattern = '^(\\w+):', capture_group = 1)
+#' ft_extract(factor_vec, pattern = '^(\\w+):', capture_group = 1)
 #' @export
 #' @author Kai Guo
-fct_extract <- function(factor_vec, pattern, capture_group = 0) {
+ft_extract <- function(factor_vec, pattern, capture_group = 0) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -824,12 +824,12 @@ fct_extract <- function(factor_vec, pattern, capture_group = 0) {
 #' factor_vec <- factor(c('apple', 'banana', 'cherry'))
 #'
 #' # Map levels to uppercase if they start with 'a'
-#' fct_map_func(factor_vec, function(x) {
+#' ft_map_func(factor_vec, function(x) {
 #'   ifelse(grepl('^a', x), toupper(x), x)
 #' })
 #' @export
 #' @author Kai Guo
-fct_map_func <- function(factor_vec, map_func) {
+ft_map_func <- function(factor_vec, map_func) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -860,12 +860,12 @@ fct_map_func <- function(factor_vec, map_func) {
 #' vec2 <- c('banana', 'date', 'apple')
 #'
 #' # Factorize with consistent levels
-#' factors <- fct_factorize(vec1, vec2)
+#' factors <- ft_factorize(vec1, vec2)
 #' levels(factors[[1]])
 #' levels(factors[[2]])
 #' @export
 #' @author Kai Guo
-fct_factorize <- function(..., levels = NULL) {
+ft_factorize <- function(..., levels = NULL) {
   vectors <- list(...)
 
   if (!all(sapply(vectors, is.character))) {
@@ -889,10 +889,10 @@ fct_factorize <- function(..., levels = NULL) {
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date'))
 #'
 #' # Remove levels that start with 'b'
-#' fct_filter_func(factor_vec, function(x) !grepl('^b', x))
+#' ft_filter_func(factor_vec, function(x) !grepl('^b', x))
 #' @export
 #' @author Kai Guo
-fct_filter_func <- function(factor_vec, func) {
+ft_filter_func <- function(factor_vec, func) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -917,13 +917,13 @@ fct_filter_func <- function(factor_vec, func) {
 #' factor_vec <- factor(c('apple', NA, 'banana', 'apple', NA))
 #'
 #' # Impute using mode
-#' fct_impute(factor_vec, method = 'mode')
+#' ft_impute(factor_vec, method = 'mode')
 #'
 #' # Impute using random selection
-#' fct_impute(factor_vec, method = 'random')
+#' ft_impute(factor_vec, method = 'random')
 #' @export
 #' @author Kai Guo
-fct_impute <- function(factor_vec, method = 'mode') {
+ft_impute <- function(factor_vec, method = 'mode') {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -963,11 +963,11 @@ fct_impute <- function(factor_vec, method = 'mode') {
 #' factor_vec2 <- factor(c('X', 'Y', 'X', 'Y'))
 #'
 #' # Create unique combinations
-#' combined_factor <- fct_unique_comb(factor_vec1, factor_vec2)
+#' combined_factor <- ft_unique_comb(factor_vec1, factor_vec2)
 #' levels(combined_factor)
 #' @export
 #' @author Kai Guo
-fct_unique_comb <- function(..., sep = '_') {
+ft_unique_comb <- function(..., sep = '_') {
   factors <- list(...)
 
   if (!all(sapply(factors, is.factor))) {

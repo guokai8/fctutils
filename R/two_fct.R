@@ -9,10 +9,10 @@
 #' modified_factor <- factor(c('apple_fruit', 'banana_fruit', 'cherry_fruit'))
 #'
 #' # Create mapping table
-#' fct_mapping(original_factor, modified_factor)
+#' ft_mapping(original_factor, modified_factor)
 #' @export
 #' @author Kai Guo
-fct_mapping <- function(original_factor, modified_factor) {
+ft_mapping <- function(original_factor, modified_factor) {
   # Parameter validation
   if (!is.factor(original_factor) || !is.factor(modified_factor)) {
     stop("Both 'original_factor' and 'modified_factor' must be factor vectors.")
@@ -44,10 +44,10 @@ fct_mapping <- function(original_factor, modified_factor) {
 #' factor_vec <- factor(c('apple', 'appel', 'banana', 'bananna', 'cherry'))
 #'
 #' # Merge similar levels
-#' fct_merge_similar(factor_vec, max_distance = 1)
+#' ft_merge_similar(factor_vec, max_distance = 1)
 #' @export
 #' @author Kai Guo
-fct_merge_similar <- function(factor_vec, max_distance = 1, method = 'lv') {
+ft_merge_similar <- function(factor_vec, max_distance = 1, method = 'lv') {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -85,10 +85,10 @@ fct_merge_similar <- function(factor_vec, max_distance = 1, method = 'lv') {
 #' mapping_df <- data.frame(old = c('A', 'B'), new = c('Alpha', 'Beta'))
 #'
 #' # Rename levels
-#' fct_rename_levels(factor_vec, mapping_df)
+#' ft_rename_levels(factor_vec, mapping_df)
 #' @export
 #' @author Kai Guo
-fct_rename_levels <- function(factor_vec, mapping_df) {
+ft_rename_levels <- function(factor_vec, mapping_df) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -116,13 +116,13 @@ fct_rename_levels <- function(factor_vec, mapping_df) {
 #' # Example using a vector without reordering data elements
 #' factor_vec <- factor(c('apple', 'banana', 'cherry', 'date'))
 #' by_vec <- c(2, 3, 1, NA)
-#' sorted_factor <- fct_sort(factor_vec, by = by_vec)
+#' sorted_factor <- ft_sort(factor_vec, by = by_vec)
 #' print(sorted_factor)
 #' # [1] apple  banana cherry date
 #' # Levels: cherry apple banana date
 #'
 #' # Example using a vector and reordering data elements
-#' sorted_factor_inplace <- fct_sort(factor_vec, by = by_vec, inplace = TRUE)
+#' sorted_factor_inplace <- ft_sort(factor_vec, by = by_vec, inplace = TRUE)
 #' print(sorted_factor_inplace)
 #' # [1] cherry apple banana date
 #' # Levels: cherry apple banana date
@@ -132,18 +132,18 @@ fct_rename_levels <- function(factor_vec, mapping_df) {
 #'   Category = factor(c('apple', 'banana', 'cherry', 'date')),
 #'   Value = c(2, 3, 1, NA)
 #' )
-#' sorted_factor_df <- fct_sort(data$Category, by = data$Value)
+#' sorted_factor_df <- ft_sort(data$Category, by = data$Value)
 #' print(sorted_factor_df)
 #' # [1] apple  banana cherry date
 #' # Levels: cherry apple banana date
 #'
 #' # Example using a data frame column and reordering data elements
-#' sorted_factor_df_inplace <- fct_sort(data$Category, by = data$Value, inplace = TRUE)
+#' sorted_factor_df_inplace <- ft_sort(data$Category, by = data$Value, inplace = TRUE)
 #' print(sorted_factor_df_inplace)
 #' # [1] cherry apple banana date
 #' # Levels: cherry apple banana date
 #' @export
-fct_sort <- function(factor_vec, by, decreasing = FALSE, na_last = TRUE, inplace = FALSE) {
+ft_sort <- function(factor_vec, by, decreasing = FALSE, na_last = TRUE, inplace = FALSE) {
   # Parameter validation
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
@@ -224,31 +224,31 @@ fct_sort <- function(factor_vec, by, decreasing = FALSE, na_last = TRUE, inplace
 #' factor_vec <- factor(c('apple', 'banana', 'cherry'))
 #'
 #' # Sort levels by reverse alphabetical order without reordering data elements
-#' sorted_custom <- fct_sort_custom(factor_vec, function(x) -rank(x))
+#' sorted_custom <- ft_sort_custom(factor_vec, function(x) -rank(x))
 #' print(sorted_custom)
 #' # [1] apple  banana cherry
 #' # Levels: cherry banana apple
 #'
 #' # Sort levels by reverse alphabetical order and reorder data elements
-#' sorted_custom_inplace <- fct_sort_custom(factor_vec, function(x) -rank(x), inplace = TRUE)
+#' sorted_custom_inplace <- ft_sort_custom(factor_vec, function(x) -rank(x), inplace = TRUE)
 #' print(sorted_custom_inplace)
 #' # [1] cherry banana apple
 #' # Levels: cherry banana apple
 #'
 #' # Sort levels by length of the level name without reordering data elements
-#' sorted_custom_length <- fct_sort_custom(factor_vec, function(x) nchar(x))
+#' sorted_custom_length <- ft_sort_custom(factor_vec, function(x) nchar(x))
 #' print(sorted_custom_length)
 #' # [1] apple  banana cherry
 #' # Levels: apple cherry banana
 #'
 #' # Sort levels by length of the level name and reorder data elements
-#' sorted_custom_length_inplace <- fct_sort_custom(factor_vec, function(x) nchar(x), inplace = TRUE)
+#' sorted_custom_length_inplace <- ft_sort_custom(factor_vec, function(x) nchar(x), inplace = TRUE)
 #' print(sorted_custom_length_inplace)
 #' # [1] apple  cherry banana
 #' # Levels: apple cherry banana
 #' @export
 #' @author Kai Guo
-fct_sort_custom <- function(factor_vec, sort_func, decreasing = FALSE, inplace = FALSE) {
+ft_sort_custom <- function(factor_vec, sort_func, decreasing = FALSE, inplace = FALSE) {
   if(!is.factor(factor_vec)){
     factor_vec <- as.factor(factor_vec)
   }
@@ -305,11 +305,11 @@ fct_sort_custom <- function(factor_vec, sort_func, decreasing = FALSE, inplace =
 #' factor_vec2 <- factor(c('cherry', 'date'))
 #'
 #' # Concatenate factors
-#' concatenated_factor <- fct_concat(factor_vec1, factor_vec2)
+#' concatenated_factor <- ft_concat(factor_vec1, factor_vec2)
 #' levels(concatenated_factor)
 #' @export
 #' @author Kai Guo
-fct_concat <- function(...) {
+ft_concat <- function(...) {
   factors <- list(...)
 
   if (!all(sapply(factors, is.factor))) {
