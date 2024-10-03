@@ -1,7 +1,7 @@
 Package: fctutils
 Type: Package
 Title: Advanced Factor Manipulation Utilities
-Version: 0.0.7
+Version: 0.0.8
 Authors@R: c(person("Kai","Guo",email = "guokai8@gmail.com",
            role = c("aut", "cre")
           ))
