@@ -1,7 +1,7 @@
 # <img src='logo.png' align="right" height="150" />
 # fctutils: Advanced Factor Manipulation Utilities for R
 <a href="https://cran.r-project.org/web/packages/fctutils/index.html"><img border="0" src="https://www.r-pkg.org/badges/version/fctutils" alt="CRAN version"></a>
- [![Project Status:](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)  [![](https://img.shields.io/badge/devel%20version-0.0.7-green.svg)](https://github.com/guokai8/fctutils)  ![Code Size:](https://img.shields.io/github/languages/code-size/guokai8/fctutils)
+ [![Project Status:](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)  [![](https://img.shields.io/badge/devel%20version-0.0.8-green.svg)](https://github.com/guokai8/fctutils)  ![Code Size:](https://img.shields.io/github/languages/code-size/guokai8/fctutils)
 [![](https://cranlogs.r-pkg.org/badges/fctutils)](https://cran.r-project.org/package=fctutils)
 
 The `fctutils` package provides a comprehensive suite of utilities for advanced manipulation and analysis of factor vectors in R. It offers tools for splitting, combining, reordering, filtering, and transforming factor levels based on various criteria. Designed to enhance the handling of categorical data, `fctutils` simplifies complex factor operations, making it easier to preprocess and analyze data in R.
