@@ -2,7 +2,7 @@
 % Please edit documentation in R/single_insert.R
 \name{ft_insert}
 \alias{ft_insert}
-\title{Insert New Levels into a Factor Vector After Specified Targets}
+\title{Insert New Levels into a Factor Vector at Specified Positions}
 \usage{
 ft_insert(
   factor_vec,
@@ -13,6 +13,7 @@ ft_insert(
   case = FALSE,
   insert_after_na = FALSE,
   allow_duplicates = FALSE,
+  position = "after",
   inplace = FALSE
 )
 }
@@ -21,9 +22,9 @@ ft_insert(
 
 \item{insert}{A character vector of new levels to insert. Each new level corresponds to the respective target level or position.}
 
-\item{target}{A character vector specifying the levels after which the new levels will be inserted. Overrides \code{positions} and \code{pattern} if provided.}
+\item{target}{A character vector specifying the levels before or after which the new levels will be inserted. If length 1 and \code{length(insert) > 1}, it will be repeated to match the length of \code{insert}. Overrides \code{positions} and \code{pattern} if provided.}
 
-\item{positions}{An integer vector specifying the positions of levels after which the new levels will be inserted. Overrides \code{target} and \code{pattern} if both are provided.}
+\item{positions}{An integer vector specifying the positions of levels before or after which the new levels will be inserted. If length 1 and \code{length(insert) > 1}, it will be repeated to match the length of \code{insert}. If any position exceeds the number of levels, the new level(s) will be appended at the end. Overrides \code{target} and \code{pattern} if both are provided.}
 
 \item{pattern}{A regular expression pattern to identify target levels for insertion. Overrides both \code{target} and \code{positions} if provided.}
 
@@ -33,17 +34,23 @@ ft_insert(
 
 \item{allow_duplicates}{Logical. If \code{TRUE}, allows insertion of new levels that already exist in the factor by making them unique (appending suffixes). Defaults to \code{FALSE}.}
 
+\item{position}{Character. Where to insert the new levels relative to the target: \code{"after"} or \code{"before"}. Defaults to \code{"after"}.}
+
 \item{inplace}{Logical. If \code{TRUE}, returns a new factor vector with elements reordered to align with the new levels' order. If \code{FALSE}, returns a new factor vector with only the levels' order adjusted, leaving the data vector's elements' order unchanged. Defaults to \code{FALSE}.}
 }
 \value{
 A new factor vector with the new levels inserted at the specified positions. If \code{inplace = TRUE}, the data vector's elements are reordered to match the new levels' order. If \code{inplace = FALSE}, only the levels' order is adjusted without changing the data vector's elements' order.
 }
 \description{
-Inserts one or more new levels into a factor vector immediately after specified target levels or
-positions. Each new level corresponds to its respective target in a one-to-one manner.
+Inserts one or more new levels into a factor vector immediately before or after specified target levels or
+positions. Each new level corresponds to its respective target level or position. If \code{positions} or \code{target}
+has a single element, it will be repeated to match the length of \code{insert}.
 Supports exact matches, position-based targeting, and pattern-based matching with optional case sensitivity.
 Can handle multiple insertions, manage duplicates, and optionally reorder the data vector's elements to
 align with the new levels.
+
+If any position in \code{positions} exceeds the number of levels in \code{factor_vec}, the new level(s) will be
+appended at the end.
 }
 \examples{
 # Example 1: Insert 'date' after position 2 and 'grape' after position 4
@@ -98,18 +105,60 @@ new_factor_case <- ft_insert(
 print(new_factor_case)
 # [1] Apple   banana  Cherry  date    Fig     grape   kiwi    kiwi.1
 
-# Example 5: Insert 'lychee' after NA, returning a new factor vector
-factor_vec_na <- factor(c('apple', NA, 'banana', 'cherry', NA, 'date'))
-new_factor_na <- ft_insert(
-  factor_vec_na,
-  insert = 'lychee',
-  insert_after_na = TRUE,
+# Example 5: Insert 'date' and 'elderberry' after position 2
+factor_vec <- factor(c('apple', 'banana', 'cherry', 'fig', 'grape'))
+new_factor <- ft_insert(
+  factor_vec,
+  insert = c('date', 'elderberry'),
+  positions = 2,
+  position = "after",
   inplace = FALSE
 )
-print(new_factor_na)
-# [1] apple  <NA>    lychee banana cherry <NA>    date
-# Example 6:
-factor_vec <- factor(c('apple', 'banana', 'cherry', 'date', 'fig', 'grape'))
+print(levels(new_factor))
+# [1] "apple"      "banana"     "date"       "elderberry" "cherry"     "fig"        "grape"
+
+# Example 6: Insert 'kiwi' at position exceeding the number of levels
+new_factor_exceed <- ft_insert(
+  factor_vec,
+  insert = 'kiwi',
+  positions = 10,  # Position exceeds number of levels
+  position = "after",
+  inplace = FALSE
+)
+print(levels(new_factor_exceed))
+# [1] "apple" "banana" "cherry" "fig" "grape" "kiwi"
+
+# Example 7: Insert multiple levels with positions exceeding the number of levels
+new_factor_multi_exceed <- ft_insert(
+  factor_vec,
+  insert = c('lemon', 'mango'),
+  positions = c(5, 10),  # Second position exceeds number of levels
+  position = "after",
+  inplace = FALSE
+)
+print(levels(new_factor_multi_exceed))
+# [1] "apple" "banana" "cherry" "fig" "grape" "lemon" "mango"
+# Example 8: Insert multiple levels after a single position (positions repeated)
+new_factor_repeat <- ft_insert(
+  factor_vec,
+  insert = c('kiwi', 'lemon', 'mango'),
+  positions = 2,
+  position = "after",
+  inplace = FALSE
+)
+print(levels(new_factor_repeat))
+# [1] "apple" "banana" "kiwi" "lemon" "mango" "cherry" "fig" "grape"
+
+# Example 9: Insert multiple levels before a single target (target repeated)
+new_factor_target_repeat <- ft_insert(
+  factor_vec,
+  insert = c('kiwi', 'lemon', 'mango'),
+  target = 'cherry',
+  position = "before",
+  inplace = FALSE
+)
+print(levels(new_factor_target_repeat))
+# [1] "apple" "banana" "kiwi" "lemon" "mango" "cherry" "fig" "grape"
 }
 \author{
 Kai Guo
