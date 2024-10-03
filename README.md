@@ -240,6 +240,11 @@ ft_insert(factor_vec, insert = c('date', 'grape'), positions = c(2, 4))
 ft_insert(factor_vec, insert = 'honeydew', pattern = '^c')
 factor_vec_na <- factor(c('apple', NA, 'banana', 'cherry', NA, 'date'))
 ft_insert(factor_vec_na, insert = 'lychee', insert_after_na = TRUE)
+#  Insert 'date' and 'elderberry' after position 2
+factor_vec <- factor(c('apple', 'banana', 'cherry', 'fig', 'grape'))
+new_factor <- ft_insert(factor_vec, insert = c('date', 'elderberry'), positions = 2,position = "after",inplace = FALSE)
+#  Insert 'kiwi' at position exceeding the number of levels
+new_factor_exceed <- ft_insert(factor_vec, insert = 'kiwi', positions = 10,  # Position exceeds number of levels  position = "after",  inplace = FALSE)
 ```
 _ft_pairs_ Creates all unique pairwise combinations between factor_vec of a vector, with options for references, symmetry, NA handling, custom filtering, and output formats. Automatically handles factors by converting them to vectors and removes extra spaces from factor_vec before processing.
 ```{r}
