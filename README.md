@@ -21,6 +21,8 @@ Install the package with its dependencies and load it for usage in R.
 ``` {r install, eval = FALSE}
 library(devtools) # Load the devtools package
 install_github("guokai8/fctutils") # Install the package
+### or install from CRAN
+install.packages('fctutils')
 ```
 ## 2. Useful functions
 ### 2.1 Ordering and Sorting Factors
